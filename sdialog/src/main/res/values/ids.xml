@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--特殊用途的id-->
+
+    <!--标记 IncludeDialogViewGroup 布局的id-->
+    <item name="id_include_dialog_view_group" type="id" />
+</resources>
