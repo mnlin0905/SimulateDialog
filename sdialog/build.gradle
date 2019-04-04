@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+// 插件bintray（较为复杂的一种）
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
 //kotlin依赖
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -32,4 +36,89 @@ dependencies {
 
     //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+//gradle-bintray-plugin插件来上传到jcenter
+def siteUrl = 'https://github.com/lovingning/SimulateDialog'    // project homepage
+def gitUrl = 'https://github.com/lovingning/SimulateDialog.git' // project git
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "sdialog"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["GPL-3.0"]
+        publish = true
+    }
+}
+
+//版本
+version = "1.0.0"
+
+//组织名
+group = "com.knowledge.mnlin"
+
+//生成 源码 jar
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+//生成 doc 文档
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.encoding "UTF-8"
+    options.charSet 'UTF-8'
+    options.author true
+    options.version true
+    options.links "https://github.com/lovingning/FastDev/tree/master/mylibrary/docs/javadoc"
+    failOnError false
+}
+//生成 doc 文档 jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+//打包
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+//安装
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'SimulateDialog_For_Android'
+                url siteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name 'GNU General Public License, Version 3.0'
+                        url 'http://www.gnu.org/licenses/gpl-3.0.html'
+                    }
+                }
+                developers {
+                    developer { //填写的一些基本信息
+                        id 'mnlin'
+                        name '**.wang'
+                        email 'mnlin0905@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
 }

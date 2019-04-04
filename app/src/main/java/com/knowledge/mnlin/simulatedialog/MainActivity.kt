@@ -1,5 +1,6 @@
 package com.knowledge.mnlin.simulatedialog
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.CardView
 import android.widget.FrameLayout
@@ -26,12 +27,21 @@ class MainActivity : SDActivity() {
     private lateinit var firstDialog: DefaultSimulateDialogImpl<CardView, FrameLayout.LayoutParams>
     private lateinit var secondDialog: DefaultSimulateDialogImpl<FrameLayout, FrameLayout.LayoutParams>
 
+    init {
+        //全局修改 遮罩颜色以及 自动关闭逻辑；该方式必须在 容器 创建前就初始化，否则不起作用（一般该逻辑放到 Application 类中即可(目前暂未开放，请等待后续版本)）
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         //只有布局文件中存在  IncludeDialogViewGroup 布局,才可以 进行弹出框等逻辑处理
         includeDialog?.also { container ->
+
+            //修改遮罩颜色以及自动关闭逻辑
+            container.closeOnClickOut = true
+            container.maskColor  = Color.parseColor("#40FF0000")
+
             //初始化弹出框控件
             firstDialog =
                     DefaultSimulateDialogImpl<CardView, FrameLayout.LayoutParams>(
@@ -56,6 +66,7 @@ class MainActivity : SDActivity() {
                         it.generateView().apply {
                             //关闭按钮
                             bt_close.dOnClick {
+                                // <b> 关闭某个弹出框 <b/>
                                 secondDialog.close(true)
                                 toast("将关闭弹窗")
                             }
@@ -79,12 +90,20 @@ class MainActivity : SDActivity() {
             }
 
             bt_open_all.dOnClick {
+                //可以分别弹出dialog
                 firstDialog.show()
                 secondDialog.show()
+
+                //也调用方法弹出所有
+                //container.showDialogs(showAll = true)
             }
             bt_open_all_animator.dOnClick {
-                firstDialog.show(AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
-                secondDialog.show(AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
+                //可以分别弹出dialog
+                firstDialog.show(AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 2000L))
+                secondDialog.show(AlphaIDVGAnimatorImpl(0f, 1f, 2000L, 500L))
+
+                //也调用方法弹出所有
+                //container.showDialogs(showAll = true,animator = AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
             }
         }
     }

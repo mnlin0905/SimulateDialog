@@ -18,6 +18,7 @@
             android:padding="16dp">
 
         <TextView
+                android:textColor="#FFFFFF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

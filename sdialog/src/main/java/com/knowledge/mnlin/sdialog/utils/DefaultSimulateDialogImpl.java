@@ -15,6 +15,8 @@ import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup;
  * function : 默认的 dialog 生成 提供器,可以方便用户创建出 dialog
  *
  * @author mnlin
+ * @param <V> V 代表 dialog 布局文件中的根部局，请务必于真实类型对应
+ * @param <L> L 代表 dialog 根部局加载时使用的 LayoutParams 类型，一般固定为 {@link android.widget.FrameLayout.LayoutParams}
  */
 public class DefaultSimulateDialogImpl<V extends View, L extends ViewGroup.LayoutParams> implements SimulateDialogInterface<V, L> {
     /**
