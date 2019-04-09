@@ -185,7 +185,7 @@ firstDialog.show(AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
 
 当然可以用户觉得弹窗时主动添加的遮罩颜色不好看，或者在用户点击 dialog 以外的区域时，不想让弹窗自动关闭，则可以通过以下两种方式 进行修改：
 
-**第一种：应用启动前全局修改遮罩颜色以及设置是否自动关闭弹窗**（当前未开放，请等待后续升级）
+**第一种：应用启动前全局修改遮罩颜色以及设置是否自动关闭弹窗**
 
 修改  [IncludeDialogViewGroup](/sdialog/src/main/java/com/knowledge/mnlin/sdialog/widgets/IncludeDialogViewGroup.kt) 类的 `defaultMaskColor` 以及 `defaultCloseOnClickOut` 属性。
 

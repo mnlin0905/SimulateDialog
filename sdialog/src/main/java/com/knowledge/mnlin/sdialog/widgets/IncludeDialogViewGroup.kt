@@ -3,6 +3,7 @@ package com.knowledge.mnlin.sdialog.widgets
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.support.annotation.CallSuper
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.View
@@ -27,6 +28,7 @@ import com.knowledge.mnlin.sdialog.utils.onTrue
  * 1.弹出第n个窗口,同时屏蔽除窗口外所有控件的点击事件
  * 2.点击返回键,如果有打开的窗口,则先关闭窗口
  * 3.可设置弹出框后的背景色
+ *
  * 4.可设置弹出框显示和隐藏的动画效果
  * 5.允许同时弹出多个dialog
  * 6.弹窗期间允许数据进行刷新(跟一般的view类似)
@@ -77,14 +79,19 @@ class IncludeDialogViewGroup : FrameLayout, View.OnClickListener {
     /**
      * 布局加载完成后,再进行事件或其他逻辑(此时务必保证Activity的布局已经进行了加载)
      */
+    @CallSuper
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        //当布局结束后,标记到context,当前界面有可能弹出dialog
-        getActivityFromView().findViewById<View>(android.R.id.content).setTag(R.id.id_include_dialog_view_group, this)
+        // 当Preview 时,不影响真正显示效果
+        if(!isInEditMode){
+            //当布局结束后,标记到context,当前界面有可能弹出dialog
+            getActivityFromView().findViewById<View>(android.R.id.content).setTag(R.id.id_include_dialog_view_group, this)
 
-        //同时添加一个中间的布局View,用作遮挡板等功效
-        addView(shadeView, LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            //同时添加一个中间的布局View,用作遮挡板等功效
+            shadeView.setBackgroundColor(Color.TRANSPARENT)
+            addView(shadeView, LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }
     }
 
     /**
@@ -266,11 +273,11 @@ class IncludeDialogViewGroup : FrameLayout, View.OnClickListener {
         /**
          * 默认的遮罩颜色
          */
-        val defaultMaskColor: Int = Color.parseColor("#40000000")
+        var defaultMaskColor: Int = Color.parseColor("#40000000")
 
         /**
          * 点击 外部时,是否默认的关闭弹出框
          */
-        val defaultCloseOnClickOut: Boolean = true
+        var defaultCloseOnClickOut: Boolean = true
     }
 }

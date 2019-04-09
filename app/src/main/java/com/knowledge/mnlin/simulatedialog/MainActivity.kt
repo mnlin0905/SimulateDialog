@@ -9,6 +9,7 @@ import com.knowledge.mnlin.sdialog.base.SDActivity
 import com.knowledge.mnlin.sdialog.utils.DefaultSimulateDialogImpl
 import com.knowledge.mnlin.sdialog.utils.dOnClick
 import com.knowledge.mnlin.sdialog.utils.toast
+import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_first.view.*
 import kotlinx.android.synthetic.main.dialog_second.view.*
@@ -28,7 +29,9 @@ class MainActivity : SDActivity() {
     private lateinit var secondDialog: DefaultSimulateDialogImpl<FrameLayout, FrameLayout.LayoutParams>
 
     init {
-        //全局修改 遮罩颜色以及 自动关闭逻辑；该方式必须在 容器 创建前就初始化，否则不起作用（一般该逻辑放到 Application 类中即可(目前暂未开放，请等待后续版本)）
+        //全局修改 遮罩颜色以及 自动关闭逻辑；该方式必须在 容器 创建前就初始化，否则不起作用（一般该逻辑放到 Application 类中即可）
+        IncludeDialogViewGroup.defaultCloseOnClickOut = false
+        IncludeDialogViewGroup.defaultMaskColor = Color.parseColor("#4000FF00")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +41,9 @@ class MainActivity : SDActivity() {
         //只有布局文件中存在  IncludeDialogViewGroup 布局,才可以 进行弹出框等逻辑处理
         includeDialog?.also { container ->
 
-            //修改遮罩颜色以及自动关闭逻辑
+            //修改遮罩颜色以及自动关闭逻辑(会覆盖之前在构造函数中,全局设置的逻辑)
             container.closeOnClickOut = true
-            container.maskColor  = Color.parseColor("#40FF0000")
+            //container.maskColor  = Color.parseColor("#40FF0000")
 
             //初始化弹出框控件
             firstDialog =
@@ -106,5 +109,7 @@ class MainActivity : SDActivity() {
                 //container.showDialogs(showAll = true,animator = AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
             }
         }
+
+
     }
 }

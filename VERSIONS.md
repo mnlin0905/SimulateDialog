@@ -1,5 +1,12 @@
 # versions
 
+# V 1.0.1
+
+> 时间 : 2019.04.09 11:30:00
+
+ 1. 修复在根部局修改为IncludeDialogViewGroup 后,Preview 无法正常工作的问题
+ 2. 修复之前在IncludeDialogViewGroup 伴生类中,将变量设置为后端的问题
+
 # V 1.0.0
     
 > 时间 : 2019.04.03 18:00:00

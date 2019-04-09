@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
 
+
+        <!--全屏效果-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+
+        <!--无actionBar,无 title-->
+        <!--<item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>-->
+
+        <!--状态栏透明化,且不占用内容部分,不过此模式时,windowFullscreen属性需要为false-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+
+    </style>
 </resources>

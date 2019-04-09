@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    app:cardBackgroundColor="#ee654321"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="@dimen/cardview_default_elevation"
-                                    android:layout_marginStart="48dp"
-                                    android:layout_marginEnd="48dp">
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="#ee654321"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp">
 
     <LinearLayout
             android:layout_width="match_parent"

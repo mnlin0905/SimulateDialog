@@ -59,7 +59,7 @@ bintray {
 }
 
 //版本
-version = "1.0.0"
+version = "1.0.1"
 
 //组织名
 group = "com.knowledge.mnlin"
