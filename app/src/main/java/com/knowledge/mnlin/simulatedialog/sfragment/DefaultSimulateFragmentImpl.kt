@@ -72,16 +72,16 @@ open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFrag
      *
      * 同时,需要更改根布局的继承属性
      *
-     * @param Container 容器布局,即加载 该Fragment 的布局
+     * @param container 容器布局,即加载 该Fragment 的布局
      */
     constructor(
-            context: Context,
-            Container: ViewGroup,
-            @LayoutRes layoutRes: Int? = null,
-            childView: View? = null
+        context: Context,
+        container: ViewGroup,
+        @LayoutRes layoutRes: Int? = null,
+        childView: View? = null
     ) : super(context) {
         contentView = when {
-            layoutRes != null -> LayoutInflater.from(context).inflate(layoutRes, Container, false)
+            layoutRes != null -> LayoutInflater.from(context).inflate(layoutRes, container, false)
             childView != null -> childView
             else -> TODO("layoutRes 和 childView 不能同时为 null")
         }

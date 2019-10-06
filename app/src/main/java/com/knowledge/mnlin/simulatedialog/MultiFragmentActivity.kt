@@ -2,7 +2,6 @@ package com.knowledge.mnlin.simulatedialog
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl
 import com.knowledge.mnlin.simulatedialog.sfragment.SimulateFragmentAdapter
@@ -30,6 +29,7 @@ class MultiFragmentActivity : AppCompatActivity() {
         adapter =
                 SimulateFragmentAdapter(mutableListOf<SimulateFragmentInterface>(
                     DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_first).apply {
+
                     },
                     DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_two).apply {
                     },
@@ -75,22 +75,6 @@ class MultiFragmentActivity : AppCompatActivity() {
                         .getOrNull(p0.position)
                         ?.onFragmentStatusChanged(SimulateFragmentInterface.STATUS_APPEAR)
                 }
-            }
-        })
-
-        //
-        vp_pager.addOnPageChangeListener(object :ViewPager.OnPageChangeListener{
-            override fun onPageScrollStateChanged(p0: Int) {
-
-            }
-
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-            }
-
-            override fun onPageSelected(p0: Int) {
-                adapter.datas
-                    .getOrNull(p0)
-                    ?.onFragmentStatusChanged(SimulateFragmentInterface.STATUS_APPEAR)
             }
         })
     }

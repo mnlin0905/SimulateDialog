@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".SimpleFragmentActivity">
+    android:orientation="vertical">
 
     <!--开始占位部分-->
     <TextView

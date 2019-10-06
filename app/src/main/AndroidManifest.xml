@@ -14,19 +14,14 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:name">
 
-        <!--sdialog首页-->
-        <activity android:name=".MainActivity" />
-
-        <activity android:name=".SimpleFragmentActivity" />
-        <activity android:name=".MultiFragmentActivity" />
-
         <!--程序入口-->
-        <activity android:name=".MenuRouteActivity">
+        <activity android:name=".MultiFragmentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 </manifest>
