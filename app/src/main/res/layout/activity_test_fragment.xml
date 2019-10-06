@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".SimpleFragmentActivity">
+
+    <!--开始占位部分-->
+    <TextView
+        android:id="@+id/tv_show_one"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="#330055FF"
+        android:gravity="center"
+        android:text="显示前一" />
+
+    <com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl
+        android:id="@+id/ssf_one"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:DefaultSimulateFragmentImpl_layout="@layout/dialog_first">
+
+    </com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl>
+
+    <com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl
+        android:id="@+id/ssf_two"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:DefaultSimulateFragmentImpl_layout="@layout/dialog_second">
+
+    </com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl>
+
+    <!--后面部分-->
+    <TextView
+        android:id="@+id/tv_show_two"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="#330055FF"
+        android:gravity="center"
+        android:text="显示后1" />
+</LinearLayout>

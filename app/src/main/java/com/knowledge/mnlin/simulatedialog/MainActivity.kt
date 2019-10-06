@@ -10,9 +10,11 @@ import com.knowledge.mnlin.sdialog.utils.DefaultSimulateDialogImpl
 import com.knowledge.mnlin.sdialog.utils.dOnClick
 import com.knowledge.mnlin.sdialog.utils.toast
 import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup
+import com.knowledge.mnlin.simulatedialog.R.id.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_first.view.*
 import kotlinx.android.synthetic.main.dialog_second.view.*
+
 
 /**
  * function : 模拟dialog窗口,实现多个dialog启动,以及动画效果
@@ -48,8 +50,8 @@ class MainActivity : SDActivity() {
             //初始化弹出框控件
             firstDialog =
                     DefaultSimulateDialogImpl<CardView, FrameLayout.LayoutParams>(
-                        container,
-                        R.layout.dialog_first
+                            container,
+                            R.layout.dialog_first
                     ).also {
                         //对 dialog 中的控件,进行逻辑处理,或者添加点击等事件
                         it.generateView().apply {
@@ -62,8 +64,8 @@ class MainActivity : SDActivity() {
 
             secondDialog =
                     DefaultSimulateDialogImpl<FrameLayout, FrameLayout.LayoutParams>(
-                        container,
-                        R.layout.dialog_second
+                            container,
+                            R.layout.dialog_second
                     ).also {
                         //对 dialog 中的控件,进行逻辑处理,或者添加点击等事件
                         it.generateView().apply {
@@ -77,7 +79,6 @@ class MainActivity : SDActivity() {
                     }
 
             //添加点击事件
-
             bt_open_first.dOnClick {
                 firstDialog.show()
             }
@@ -108,8 +109,7 @@ class MainActivity : SDActivity() {
                 //也调用方法弹出所有
                 //container.showDialogs(showAll = true,animator = AlphaIDVGAnimatorImpl(0f, 1f, 1000L, 500L))
             }
+
         }
-
-
     }
 }

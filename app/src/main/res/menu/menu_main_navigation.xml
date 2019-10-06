@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_one"
+        android:icon="@mipmap/ic_launcher"
+        android:orderInCategory="0"
+        android:title="one" />
+
+    <item
+        android:id="@+id/action_two"
+        android:icon="@mipmap/ic_launcher"
+        android:orderInCategory="1"
+        android:title="two" />
+
+    <item
+        android:id="@+id/action_three"
+        android:icon="@mipmap/ic_launcher"
+        android:orderInCategory="2"
+        android:title="three" />
+
+    <item
+        android:id="@+id/action_four"
+        android:icon="@mipmap/ic_launcher"
+        android:orderInCategory="3"
+        android:title="four" />
+
+</menu>

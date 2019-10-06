@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <!--flutter碎片布局-->
+    <LinearLayout
+        android:id="@+id/fl_flutter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFFFF"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Activity中固定多个Fragment碎片" />
+
+        <TextView
+            android:id="@+id/tv_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="bottomNavigation+tabLayout+viewPager模拟Fragment" />
+
+        <TextView
+            android:id="@+id/tv_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="模拟Dialog效果实现" />
+
+    </LinearLayout>
+</com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup>
