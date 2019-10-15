@@ -1,14 +1,14 @@
-package com.knowledge.mnlin.simulatedialog;
+package com.knowledge.mnlin.simulatedialog.base;
 
 import android.app.Application;
 
 /**
  * Created on 2019/4/25  9:38
- * function :
+ * function : page - app
  *
  * @author mnlin
  */
-public class BaseApplication extends Application {
+public class PageApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

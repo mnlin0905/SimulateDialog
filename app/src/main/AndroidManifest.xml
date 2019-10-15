@@ -4,7 +4,7 @@
     package="com.knowledge.mnlin.simulatedialog">
 
     <application
-        android:name=".BaseApplication"
+        android:name=".base.PageApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,6 +22,10 @@
 
         <!--程序入口-->
         <activity android:name=".MenuRouteActivity">
+        </activity>
+
+        <!--程序入口-->
+        <activity android:name=".base.PageParent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

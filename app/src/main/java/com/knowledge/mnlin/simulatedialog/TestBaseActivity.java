@@ -1,10 +1,12 @@
 package com.knowledge.mnlin.simulatedialog;
 
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
 import com.knowledge.mnlin.sdialog.base.SDActivity;
 import com.knowledge.mnlin.sdialog.interfaces.ProvideIncludeDialogInterface;
 import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created on 2019/4/4  10:20
@@ -38,7 +40,7 @@ public class TestBaseActivity extends AppCompatActivity implements ProvideInclud
     @Override
     public IncludeDialogViewGroup getIncludeDialog() {
         //防止根部局为动态添加进入,防止布局加载完成前直接引用 dialogContentView
-        if(dialogContentView == null){
+        if (dialogContentView == null) {
             //获取容纳dialog容器
             dialogContentView = ((IncludeDialogViewGroup) findViewById(android.R.id.content).getTag(com.knowledge.mnlin.sdialog.R.id.id_include_dialog_view_group));
         }
