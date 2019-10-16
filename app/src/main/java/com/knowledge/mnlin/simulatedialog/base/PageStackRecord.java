@@ -18,27 +18,9 @@ import java.util.LinkedList;
  */
 public final class PageStackRecord implements PageOperate {
     /**
-     * single - instance
-     */
-    private static final PageStackRecord singleInstance = new PageStackRecord();
-
-    /**
      * record page
      */
     private LinkedList<Page> records = new LinkedList<>();
-
-    private PageStackRecord() {
-        // throw new RuntimeException("not support");
-    }
-
-    /**
-     * provide instance for external call
-     *
-     * @return {@link PageStackRecord#singleInstance}
-     */
-    public static PageStackRecord getInstance() {
-        return singleInstance;
-    }
 
     /**
      * @param page {@link Page}
@@ -56,9 +38,6 @@ public final class PageStackRecord implements PageOperate {
      */
     @Override
     public void insertPage(int index, @NotNull Page page) {
-        switch (page.getLauncherType()) {
-// TODO
-        }
         records.add(index, page);
     }
 

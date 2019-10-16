@@ -1,9 +1,9 @@
 package com.knowledge.mnlin.simulatedialog
 
+import com.knowledge.mnlin.sdialog.utils.dOnClick
 import com.knowledge.mnlin.simulatedialog.base.PageImpl
-import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance
-import com.knowledge.mnlin.simulatedialog.plugins.InjectPageAppearanceType
 import com.knowledge.mnlin.simulatedialog.plugins.InjectPageLayoutRes
+import kotlinx.android.synthetic.main.fragment_two.view.*
 
 /**************************************
  * function : test activity
@@ -13,20 +13,44 @@ import com.knowledge.mnlin.simulatedialog.plugins.InjectPageLayoutRes
  **************************************/
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_first)
-class FirstPage : PageImpl()
+class FirstPage : PageImpl() {
+    override fun onPageViewInject() {
+        super.onPageViewInject()
+        contentView.tv_.dOnClick {
+            pageParent.addPage(SecondPage())
+        }
+    }
+}
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_two)
-@InjectPageAppearanceType(pageAppearanceType = PageAppearance.PAGE_APPEARANCE_PART)
-class SecondPage : PageImpl()
+class SecondPage : PageImpl() {
+    override fun onPageViewInject() {
+        super.onPageViewInject()
+        contentView.tv_.dOnClick {
+            pageParent.addPage(ThirdPage())
+        }
+    }
+}
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_three)
-@InjectPageAppearanceType(pageAppearanceType = PageAppearance.PAGE_APPEARANCE_FULLSCREEN)
-class ThirdPage : PageImpl()
+class ThirdPage : PageImpl() {
+    override fun onPageViewInject() {
+        super.onPageViewInject()
+        contentView.tv_.dOnClick {
+            pageParent.addPage(FourthPage())
+        }
+    }
+}
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_four)
-@InjectPageAppearanceType(pageAppearanceType = PageAppearance.PAGE_APPEARANCE_PART)
-class FourthPage : PageImpl()
+class FourthPage : PageImpl() {
+    override fun onPageViewInject() {
+        super.onPageViewInject()
+        contentView.tv_.dOnClick {
+            pageParent.addPage(FifthPage())
+        }
+    }
+}
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_fifth)
-
 class FifthPage : PageImpl()

@@ -16,6 +16,10 @@ import com.knowledge.mnlin.simulatedialog.interfaces.MaskOperateListener;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLauncherType;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageLifeCycle;
+import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2019/10/15  10:03
@@ -34,6 +38,12 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
      */
     @Nullable
     private MaskOperateListener listener;
+
+    /**
+     * host object
+     */
+    @NotNull
+    private PartPage hostPage;
 
     {
         maskDrawable = new ColorDrawable(Color.parseColor("#00000000"));
@@ -63,14 +73,16 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
     /**
      * @param listener dest listener
      */
-    public void setMaskOperateListener(@Nullable MaskOperateListener listener) {
+    @NonNull
+    public ShadeMaskView setMaskOperateListener(@Nullable MaskOperateListener listener) {
         this.listener = listener;
+        return this;
     }
 
     @Override
     public void onClick(View view) {
         if (listener != null) {
-            listener.dispatchMaskOnClick(view);
+            listener.dispatchMaskOnClick(this);
         }
     }
 
@@ -131,7 +143,33 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
      * page is visible
      */
     @Override
-    public void onPageAttach() {
+    public void onPageAttachToParent() {
+
+    }
+
+    /**
+     * page visible and interactive
+     */
+    @Override
+    public void onPageActive() {
+
+    }
+
+    /**
+     * Before the interface is invisible, it has entered the visible state again.
+     * <p>
+     * called after {@link PageLifeCycle#onPageActive()}
+     */
+    @Override
+    public void onPageReResume() {
+
+    }
+
+    /**
+     * The page is not visible or partially visible and cannot interact with the user
+     */
+    @Override
+    public void onPageDeactive() {
 
     }
 
@@ -139,15 +177,7 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
      * page be blocked
      */
     @Override
-    public void onPageDetach() {
-
-    }
-
-    /**
-     * page is removed from page-stack-record
-     */
-    @Override
-    public void onPageDestroy() {
+    public void onPageDetachFromParent() {
 
     }
 
@@ -159,6 +189,16 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
     @Override
     public void onPageReused() {
 
+    }
+
+    /**
+     * page current phase
+     * <p>
+     * the life cycle of "ShadeMaskView" is meaningless
+     */
+    @Override
+    public int getCurrentGradation() {
+        return PageLifeCycle.PAGE_GRADATION_IDEL;
     }
 
     /**
@@ -177,5 +217,21 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
     @Override
     public ViewGroup.LayoutParams providerIntegrateParams() {
         return this.getLayoutParams();
+    }
+
+    @NotNull
+    public PartPage getHostPage() {
+        return hostPage;
+    }
+
+    /**
+     * inject host-page: part-page
+     *
+     * @param hostPage host page
+     * @return self
+     */
+    ShadeMaskView setHostPage(@NotNull PartPage hostPage) {
+        this.hostPage = hostPage;
+        return this;
     }
 }

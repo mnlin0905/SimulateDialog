@@ -1,15 +1,16 @@
 package com.knowledge.mnlin.simulatedialog.base;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.MaskOperateListener;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
+import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,17 +30,18 @@ import java.util.LinkedList;
  */
 public class PageManager extends FrameLayout implements PageOperate, MaskOperateListener {
     /**
-     * simulated masking effect
+     * is really remove or add page?
+     * <p>
+     * A lot of times we need to keep records.
      */
-    @NonNull
-    private final ShadeMaskView shadeMaskView;
+    private boolean isRealOperatePage = true;
 
     /**
      * page's route-record
      *
      * @see PageStackRecord
      */
-    private PageStackRecord pageStackRecord = PageStackRecord.getInstance();
+    private PageStackRecord pageStackRecord = new PageStackRecord();
 
     public PageManager(@NotNull Context context) {
         this(context, null);
@@ -55,10 +57,6 @@ public class PageManager extends FrameLayout implements PageOperate, MaskOperate
 
     public PageManager(@NotNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-
-        // init mask
-        shadeMaskView = new ShadeMaskView(context);
-        shadeMaskView.setMaskOperateListener(this);
     }
 
     /**
@@ -72,25 +70,46 @@ public class PageManager extends FrameLayout implements PageOperate, MaskOperate
      * remove record
      *
      * @param page {@link Page}
-     * @return true if remove success
+     * @return true if remove success , false if record remain
      */
     @Override
-    public boolean removePage(@NotNull Page page) {
+    public final synchronized boolean removePage(@NotNull Page page) {
+        // on-page-deactivate
+        page.onPageDeactive();
+
+        // determine whether the previous page needs to be add
+        if (isRealOperatePage && page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_FULLSCREEN && !(page instanceof ShadeMaskView)) {
+            int position = findAllPages().indexOf(page);
+            if (position > 0) {
+                isRealOperatePage = false;
+                insertPage(position - 1, findAllPages().get(position - 1));
+                isRealOperatePage = true;
+            }
+        }
+
         // remove page
         removeView(page.providerContentView());
 
-        // on-page-detach
-        page.onPageDetach();
-
         // remove success or fail,remove record
-        boolean result = pageStackRecord.removePage(page);
+        boolean result = isRealOperatePage && pageStackRecord.removePage(page);
 
-        // post "on-page-destroy"
-        post(page::onPageDestroy);
+        // on-page-detach
+        page.onPageDetachFromParent();
 
         // remove mask
-        if (findAllPages().size() > 0 && findAllPages().getLast().getClass() == ShadeMaskView.class) {
-            removePage(findAllPages().getLast());
+        if (page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART && page instanceof PartPage) {
+            ShadeMaskView mask = ((PartPage) page).peekMaskForPart();
+            if (mask != null) {
+                removePage(mask);
+            }
+        }
+
+        // if isRealOperatePage is false,need remove a page before(It should exist under normal circumstances.);
+        if (!isRealOperatePage && page instanceof ShadeMaskView) {
+            int beforePageIndex = findAllPages().indexOf(page) - 1;
+            if (beforePageIndex >= 0) {
+                removePage(findAllPages().get(beforePageIndex));
+            }
         }
 
         return result;
@@ -101,22 +120,77 @@ public class PageManager extends FrameLayout implements PageOperate, MaskOperate
      *
      * @param page  {@link Page}
      * @param index the index of page who required add
+     * @throws RuntimeException if first page is "part" type
      */
     @Override
-    public void insertPage(int index, @NotNull Page page) {
+    public final synchronized void insertPage(int index, @NotNull Page page) {
         // if page is not fullscreen , add mask-view
-        if (page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART) {
-            addPage(new ShadeMaskView(getContext()));
+        if (page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART && page instanceof PartPage) {
+            if (findAllPages().size() == 0) {
+                throw new RuntimeException("first page can't be 'part' type");
+            }
+
+            // insert mask
+            if (isRealOperatePage) {
+                insertMaskPage((PartPage) page, index++);
+            }
         }
 
-        // add page
-        addView(page.providerContentView(), index, page.providerIntegrateParams());
+        // add page ; Page insertion of visual interface is not supported at present
+        if (index >= findAllPages().size()) {
+            addView(page.providerContentView(), page.providerIntegrateParams());
+        } else {
+            addView(page.providerContentView(), 0, page.providerIntegrateParams());
+        }
 
         // add record
-        pageStackRecord.addPage(page);
+        if (isRealOperatePage) {
+            pageStackRecord.insertPage(index, page);
+        } else {
+            // on-page-resume
+            page.onPageReResume();
+        }
 
         // on-page-attach
-        page.onPageAttach();
+        page.onPageAttachToParent();
+
+        // determine whether the previous page needs to be removed
+        if (isRealOperatePage && page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_FULLSCREEN && !(page instanceof ShadeMaskView)) {
+            int position = findAllPages().indexOf(page);
+            if (position > 0) {
+                isRealOperatePage = false;
+                removePage(findAllPages().get(position - 1));
+                isRealOperatePage = true;
+            }
+        }
+
+        // on-page-activate
+        page.onPageActive();
+
+        // TODO
+        if (!isRealOperatePage && page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART && page instanceof PartPage) {
+            insertMaskPage((PartPage) page, --index);
+
+            // TODO mask 前面还需要再插入一个 page
+            int previousIndex = findAllPages().indexOf(((PartPage) page).peekMaskForPart()) - 1;
+            if (previousIndex >= 0) {
+                insertPage(previousIndex, findAllPages().get(previousIndex));
+            }
+        }
+    }
+
+    /**
+     * TODO : 如果后面支持 insert 中间插入,该方法就不必提取了
+     * <p>
+     * insert mask-page
+     *
+     * @param host  host
+     * @param index index
+     */
+    private void insertMaskPage(PartPage host, int index) {
+        ShadeMaskView mask = host.peekMaskForPart() == null ? new ShadeMaskView(getContext()).setMaskOperateListener(this).setHostPage(host) : host.peekMaskForPart();
+        insertPage(index, mask);
+        host.injectMaskForPart(mask);
     }
 
     /**
@@ -145,10 +219,18 @@ public class PageManager extends FrameLayout implements PageOperate, MaskOperate
     /**
      * dispatch the click action
      *
-     * @param view target
+     * @param mask target
      */
     @Override
-    public void dispatchMaskOnClick(@NonNull View view) {
+    public void dispatchMaskOnClick(@NonNull ShadeMaskView mask) {
+        if (mask.getHostPage().closedOnClickOutside()) {
+            // remove host - view
+            removePage(mask.getHostPage());
+        }
+    }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
     }
 }

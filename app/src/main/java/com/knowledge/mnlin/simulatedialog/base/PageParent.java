@@ -54,7 +54,8 @@ public class PageParent extends AppCompatActivity implements PageOperate {
 
     {
         // inject instance
-        if (instance != null) {
+        //noinspection ConstantConditions
+        if (instance != null && pageManager != null && findAllPages().size() != 0) {
             throw new RuntimeException("cannot be create repeatedly");
         }
 
@@ -73,7 +74,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
         mainHandler = new Handler(Looper.getMainLooper());
 
         // TODO enter of page-app
-        addPage(new FirstPage(this));
+        addPage(new FirstPage());
     }
 
     @Override
@@ -101,10 +102,10 @@ public class PageParent extends AppCompatActivity implements PageOperate {
     public void onBackPressed() {
         LinkedList<Page> allRecords = findAllPages();
 
-        if (allRecords.size() <= 1) {
-            // has one or none page
+        if (allRecords.size() == 0) {
+            // has none page
             super.onBackPressed();
-        } else if (!allRecords.getLast().onBackPressed()) {
+        }  else if (!allRecords.getLast().onBackPressed()) {
             // intercept the action
             super.onBackPressed();
         }
@@ -118,7 +119,14 @@ public class PageParent extends AppCompatActivity implements PageOperate {
      */
     @Override
     public boolean removePage(@NotNull Page page) {
-        return pageManager.removePage(page);
+        boolean result = pageManager.removePage(page);
+
+        // prevent blank interface
+        if (findAllPages().size() == 0) {
+            onBackPressed();
+        }
+
+        return result;
     }
 
     /**
@@ -134,7 +142,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
                 pageManager.insertPage(index, page);
                 break;
             case PageLauncherType.LAUNCHER_SINGLE_TOP: // single top
-                Page last = pageManager.getPageStackRecord().findAllPages().peekLast();
+                Page last = findAllPages().peekLast();
                 if (last != null && page.getClass() == last.getClass()) {
                     last.onPageReused();
                 } else {
@@ -142,7 +150,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
                 }
                 break;
             case PageLauncherType.LAUNCHER_SINGLE_TASK: // single task
-                LinkedList<Page> allPages = pageManager.getPageStackRecord().findAllPages();
+                LinkedList<Page> allPages = findAllPages();
                 int position = -1;
                 for (int i = 0; i < allPages.size(); i++) {
                     if (allPages.get(i).getClass() == page.getClass()) {
@@ -151,12 +159,13 @@ public class PageParent extends AppCompatActivity implements PageOperate {
                 }
                 if (position != -1) {
                     for (int i = allPages.size() - 1; i > position; i--) {
-                        pageManager.removePage(allPages.get(i));
+                        removePage(allPages.get(i));
                     }
                     allPages.getLast().onPageReused();
                 } else {
                     pageManager.insertPage(index, page);
                 }
+                break;
             default:
                 throw new RuntimeException("not support");
         }

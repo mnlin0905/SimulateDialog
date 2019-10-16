@@ -32,6 +32,7 @@ PageParent 需要实现的功能:
 ## 待实现逻辑
 
  1. 添加子child时动效 : LayoutTransition
+ 2. 界面插入,a->b,在两个page中插入c,变成 a->c->b, 暂时不支持可视界面插入新page
 
 
 

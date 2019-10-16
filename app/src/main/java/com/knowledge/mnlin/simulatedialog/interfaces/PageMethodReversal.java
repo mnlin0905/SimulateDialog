@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.knowledge.mnlin.simulatedialog.base.PageImpl;
 import com.knowledge.mnlin.simulatedialog.base.PageParent;
 
 /**
@@ -15,11 +16,22 @@ import com.knowledge.mnlin.simulatedialog.base.PageParent;
  */
 public interface PageMethodReversal {
     /**
+     * called method is legal or illegal
+     */
+    static void ensureCalledMethodIsLegal() {
+        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[4];
+        if (!stackTraceElement.getClassName().equals(PageImpl.class.getCanonicalName())) {
+            throw new RuntimeException("Non 'PageImpl' class is not allowed to call this method");
+        }
+    }
+
+    /**
      * @param pageParent PageParent
      * @return real view of page
      */
     @Nullable
-    default View getContentView(@NonNull PageParent pageParent) {
+    default View generateContentView(@NonNull PageParent pageParent) {
+        ensureCalledMethodIsLegal();
         return null;
     }
 
@@ -28,7 +40,8 @@ public interface PageMethodReversal {
      * @return real layout-params of page
      */
     @Nullable
-    default ViewGroup.LayoutParams getLayoutParams(@NonNull PageParent pageParent) {
+    default ViewGroup.LayoutParams generateLayoutParams(@NonNull PageParent pageParent) {
+        ensureCalledMethodIsLegal();
         return null;
     }
 }

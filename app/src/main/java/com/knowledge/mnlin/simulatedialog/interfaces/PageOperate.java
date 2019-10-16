@@ -33,6 +33,7 @@ public interface PageOperate {
      * add record
      *
      * @param page {@link Page}
+     * @throws RuntimeException Do not override this method
      */
     default void addPage(@NotNull Page page) {
         insertPage(findAllPages().size(), page);

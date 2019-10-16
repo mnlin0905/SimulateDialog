@@ -1,7 +1,8 @@
 package com.knowledge.mnlin.simulatedialog.interfaces;
 
 import android.support.annotation.NonNull;
-import android.view.View;
+
+import com.knowledge.mnlin.simulatedialog.base.ShadeMaskView;
 
 /**
  * dispatch the mask's action
@@ -9,7 +10,7 @@ import android.view.View;
 public interface MaskOperateListener {
     /**
      * dispatch the click action
-     * @param view target
+     * @param mask target
      */
-    void dispatchMaskOnClick(@NonNull View view);
+    void dispatchMaskOnClick(@NonNull ShadeMaskView mask);
 }

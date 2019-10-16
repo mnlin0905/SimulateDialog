@@ -14,16 +14,6 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:name">
 
-        <!--sdialog首页-->
-        <activity android:name=".MainActivity" />
-
-        <activity android:name=".SimpleFragmentActivity" />
-        <activity android:name=".MultiFragmentActivity" />
-
-        <!--程序入口-->
-        <activity android:name=".MenuRouteActivity">
-        </activity>
-
         <!--程序入口-->
         <activity android:name=".base.PageParent">
             <intent-filter>
