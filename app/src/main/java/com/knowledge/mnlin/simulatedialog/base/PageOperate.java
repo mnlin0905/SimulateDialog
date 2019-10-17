@@ -1,6 +1,6 @@
-package com.knowledge.mnlin.simulatedialog.interfaces;
+package com.knowledge.mnlin.simulatedialog.base;
 
-import com.knowledge.mnlin.simulatedialog.base.PageParent;
+import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
-public interface PageOperate {
+ interface PageOperate {
     /**
      * remove record
      *
@@ -32,6 +32,7 @@ public interface PageOperate {
      *
      * @param page {@link Page}
      * @throws RuntimeException Do not override this method
+     * @hide
      */
     default void addPage(@NotNull Page page) {
         insertPage(findAllPages().size(), page);

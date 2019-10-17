@@ -1,7 +1,6 @@
 package com.knowledge.mnlin.simulatedialog.base;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
-import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
-public final class PageStackRecord implements PageOperate {
+final class PageStackRecord implements PageOperate {
     /**
      * record page
      */

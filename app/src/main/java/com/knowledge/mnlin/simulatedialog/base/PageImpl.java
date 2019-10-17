@@ -39,6 +39,7 @@ public abstract class PageImpl implements PartPage, FullPage {
      * simulated masking effect
      */
     @Nullable
+    private
     ShadeMaskView maskForPart;
 
     /**
@@ -76,6 +77,11 @@ public abstract class PageImpl implements PartPage, FullPage {
      */
     @NotNull
     private PageParent parent;
+
+    /**
+     * if attach to page-manager,this value is not -1
+     */
+    private int indexInPageStack = -1;
 
     public PageImpl() {
         this.parent = PageParent.instance;
@@ -211,19 +217,16 @@ public abstract class PageImpl implements PartPage, FullPage {
         if (contentViewHolder == null) {
             synchronized (this) {
                 if (contentViewHolder == null) {
-                    View contentView = generateContentView(parent);
+                    contentViewHolder = generateContentView(parent);
 
                     // if subclass don't override method
-                    if (contentView == null) {
+                    if (contentViewHolder == null) {
                         if (annotationLayoutId == null) {
                             throw new RuntimeException("please implement method 'generateContentView(PageParent)' or  adding 'InjectPageLayoutRes' annotations");
                         }
 
                         // get value from annotation
                         contentViewHolder = LayoutInflater.from(parent).inflate(annotationLayoutId, parent.getPageManager(), false);
-                    } else {
-                        // "generateContentView()" method takes precedence
-                        contentViewHolder = contentView;
                     }
 
                     // Event penetration not allowed
@@ -249,7 +252,13 @@ public abstract class PageImpl implements PartPage, FullPage {
         if (layoutParamHolder == null) {
             synchronized (this) {
                 if (layoutParamHolder == null) {
-                    layoutParamHolder = providerContentView().getLayoutParams();
+                    layoutParamHolder = generateLayoutParams(parent);
+                    if (layoutParamHolder == null) {
+                        layoutParamHolder = providerContentView().getLayoutParams();
+                        if (layoutParamHolder == null) {
+                            layoutParamHolder = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        }
+                    }
                 }
             }
         }
@@ -268,6 +277,14 @@ public abstract class PageImpl implements PartPage, FullPage {
     @Override
     public PageParent getPageParent() {
         return parent;
+    }
+
+    /**
+     * @return index in {@link PageStackRecord} ; -1 if not attach to {@link PageManager}
+     */
+    @Override
+    public int getIndexInStackRecord() {
+        return parent.findAllPages().indexOf(this);
     }
 
     /**

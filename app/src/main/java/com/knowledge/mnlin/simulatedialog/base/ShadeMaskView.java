@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author mnlin0905@gmail.com
  */
-public class ShadeMaskView extends FrameLayout implements View.OnClickListener, Page {
+public final class ShadeMaskView extends FrameLayout implements View.OnClickListener, Page {
     /**
      * dimen bg-drawable
      */
@@ -84,6 +84,14 @@ public class ShadeMaskView extends FrameLayout implements View.OnClickListener, 
         if (listener != null) {
             listener.dispatchMaskOnClick(this);
         }
+    }
+
+    /**
+     * @return index in {@link PageStackRecord} ; -1 if not attach to {@link PageManager}
+     */
+    @Override
+    public int getIndexInStackRecord() {
+        return hostPage.getIndexInStackRecord() - 1;
     }
 
     /**

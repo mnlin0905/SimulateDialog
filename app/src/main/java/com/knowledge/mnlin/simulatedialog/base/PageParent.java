@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import com.knowledge.mnlin.simulatedialog.FirstPage;
 import com.knowledge.mnlin.simulatedialog.R;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLauncherType;
-import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ import java.util.LinkedList;
  * @author mnlin0905@gmail.com
  */
 @SuppressLint("Registered")
-public class PageParent extends AppCompatActivity implements PageOperate {
+public final class PageParent extends AppCompatActivity implements PageOperate {
     /**
      * external reference
      */
@@ -63,6 +63,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
     }
 
     @Override
+    @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -80,6 +81,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        // TODO
     }
 
     /**
@@ -94,7 +96,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
      * @return {@link #singlePageManager}
      */
     @NotNull
-    public PageManager getPageManager() {
+    PageManager getPageManager() {
         return pageManager;
     }
 
@@ -105,7 +107,7 @@ public class PageParent extends AppCompatActivity implements PageOperate {
         if (allRecords.size() == 0) {
             // has none page
             super.onBackPressed();
-        }  else if (!allRecords.getLast().onBackPressed()) {
+        } else if (!allRecords.getLast().onBackPressed()) {
             // intercept the action
             super.onBackPressed();
         }
@@ -113,12 +115,14 @@ public class PageParent extends AppCompatActivity implements PageOperate {
 
     /**
      * remove record
+     * <p>
+     * attend: Please call in the main thread.
      *
      * @param page {@link Page}
      * @return true if remove success
      */
     @Override
-    public boolean removePage(@NotNull Page page) {
+    public final boolean removePage(@NotNull Page page) {
         boolean result = pageManager.removePage(page);
 
         // prevent blank interface
@@ -131,12 +135,15 @@ public class PageParent extends AppCompatActivity implements PageOperate {
 
     /**
      * insert record
+     * <p>
+     * attend: Please call in the main thread.
      *
      * @param page  {@link Page}
      * @param index the index of page who required add
+     *              TODO not implement
      */
     @Override
-    public void insertPage(int index, @NotNull Page page) {
+    public final void insertPage(int index, @NotNull Page page) {
         switch (page.getLauncherType()) {
             case PageLauncherType.LAUNCHER_DEFAULT_TYPE: // default
                 pageManager.insertPage(index, page);
@@ -172,24 +179,35 @@ public class PageParent extends AppCompatActivity implements PageOperate {
     }
 
     /**
+     * @see {@link PageManager#insertPageRecord(int, Page)}
+     */
+    public final void insertPageRecord(int index, @NotNull Page page) {
+        pageManager.insertPageRecord(index, page);
+    }
+
+    /**
      * get required page
+     * <p>
+     * attend: Please call in the main thread.
      *
      * @param index page's position in {@link records}
      * @return index corresponding to record
      */
     @Override
-    public Page findPage(int index) {
+    public final Page findPage(int index) {
         return pageManager.findPage(index);
     }
 
     /**
      * get all pages
+     * <p>
+     * attend: Please call in the main thread.
      *
      * @return all pages
      */
     @NotNull
     @Override
-    public LinkedList<Page> findAllPages() {
+    public final LinkedList<Page> findAllPages() {
         return pageManager.findAllPages();
     }
 }

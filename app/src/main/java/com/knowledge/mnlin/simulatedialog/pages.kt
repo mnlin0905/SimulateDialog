@@ -17,7 +17,7 @@ class FirstPage : PageImpl() {
     override fun onPageViewInject() {
         super.onPageViewInject()
         contentView.tv_.dOnClick {
-            pageParent.addPage(SecondPage())
+            pageParent.addPage(ThirdPage())
         }
     }
 }
@@ -26,9 +26,9 @@ class FirstPage : PageImpl() {
 class SecondPage : PageImpl() {
     override fun onPageViewInject() {
         super.onPageViewInject()
-        contentView.tv_.dOnClick {
-            pageParent.addPage(ThirdPage())
-        }
+        /* contentView.tv_.dOnClick {
+             pageParent.addPage(ThirdPage())
+         }*/
     }
 }
 
@@ -38,6 +38,7 @@ class ThirdPage : PageImpl() {
         super.onPageViewInject()
         contentView.tv_.dOnClick {
             pageParent.addPage(FourthPage())
+
         }
     }
 }
@@ -53,4 +54,13 @@ class FourthPage : PageImpl() {
 }
 
 @InjectPageLayoutRes(layoutResId = R.layout.fragment_fifth)
-class FifthPage : PageImpl()
+class FifthPage : PageImpl() {
+    /**
+     * page visible and interactive
+     */
+    override fun onPageActive() {
+        super.onPageActive()
+
+        pageParent.insertPageRecord(3, SecondPage())
+    }
+}

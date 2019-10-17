@@ -5,6 +5,7 @@ import android.support.annotation.IntRange;
 /**
  * Created on 2019/10/14  14:39
  * function : the type when put in page
+ * TODO
  *
  * @author mnlin0905@gmail.com
  */
