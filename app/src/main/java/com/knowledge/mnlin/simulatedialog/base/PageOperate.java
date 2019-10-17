@@ -1,8 +1,6 @@
 package com.knowledge.mnlin.simulatedialog.interfaces;
 
-import com.knowledge.mnlin.simulatedialog.base.PageManager;
 import com.knowledge.mnlin.simulatedialog.base.PageParent;
-import com.knowledge.mnlin.simulatedialog.base.PageStackRecord;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
