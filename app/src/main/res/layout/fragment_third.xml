@@ -2,13 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFFFF">
+    android:layout_gravity="bottom"
+    android:background="#55FF00FF">
 
     <TextView
         android:id="@+id/tv_"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:text="fragment-three"
         android:padding="50dp"
-        android:text="fragment-four" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </FrameLayout>

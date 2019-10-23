@@ -1,6 +1,7 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

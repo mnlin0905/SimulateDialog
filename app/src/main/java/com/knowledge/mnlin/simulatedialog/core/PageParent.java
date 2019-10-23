@@ -1,4 +1,4 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.knowledge.mnlin.simulatedialog.FirstPage;
 import com.knowledge.mnlin.simulatedialog.R;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLauncherType;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +83,7 @@ public final class PageParent extends AppCompatActivity implements PageOperate {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        // TODO
+        // TODO 系统级别的 intent 处理,暂无逻辑
     }
 
     /**
@@ -140,7 +142,6 @@ public final class PageParent extends AppCompatActivity implements PageOperate {
      *
      * @param page  {@link Page}
      * @param index the index of page who required add
-     *              TODO not implement
      */
     @Override
     public final void insertPage(int index, @NotNull Page page) {
@@ -166,7 +167,14 @@ public final class PageParent extends AppCompatActivity implements PageOperate {
                 }
                 if (position != -1) {
                     for (int i = allPages.size() - 1; i > position; i--) {
-                        removePage(allPages.get(i));
+                        // TODO 待优化部分,尽量避免重复的add/remove view 工作
+                        Page removed = allPages.get(i);
+                        removePage(removed);
+
+                        // if is part-type , maybe require "i--"
+                        if (removed.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART) {
+                            i--;
+                        }
                     }
                     allPages.getLast().onPageReused();
                 } else {
@@ -179,7 +187,7 @@ public final class PageParent extends AppCompatActivity implements PageOperate {
     }
 
     /**
-     * @see {@link PageManager#insertPageRecord(int, Page)}
+     * @see PageManager#insertPageRecord(int, Page)
      */
     public final void insertPageRecord(int index, @NotNull Page page) {
         pageManager.insertPageRecord(index, page);

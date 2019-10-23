@@ -47,5 +47,9 @@ dependencies {
     implementation project(':sdialog')
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     implementation 'com.android.support:design:28.0.0'
+
     implementation 'com.orhanobut:logger:2.1.1'
+
+    //AndroidUtilCode
+    implementation 'com.blankj:utilcode:1.12.1'
 }

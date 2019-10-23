@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 /**
  * Created on 2019/10/12  22:03
- * function :
+ * function : provider required property parameters
  *
  * @author mnlin0905@gmail.com
  */

@@ -2,7 +2,7 @@ package com.knowledge.mnlin.simulatedialog.interfaces;
 
 import android.support.annotation.NonNull;
 
-import com.knowledge.mnlin.simulatedialog.base.PageParent;
+import com.knowledge.mnlin.simulatedialog.core.PageParent;
 
 /**
  * Created on 2019/10/17  11:00
@@ -21,7 +21,7 @@ public interface PageChannel<T extends PageChannel> {
     PageParent getPageParent();
 
     /**
-     * @return index in {@link com.knowledge.mnlin.simulatedialog.base.PageStackRecord} ; -1 if not attach to {@link com.knowledge.mnlin.simulatedialog.base.PageManager}
+     * @return index in {@link com.knowledge.mnlin.simulatedialog.core.PageStackRecord} ; -1 if not attach to {@link com.knowledge.mnlin.simulatedialog.core.PageManager}
      */
     int getIndexInStackRecord();
 }

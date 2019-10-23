@@ -1,18 +1,28 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import com.knowledge.mnlin.simulatedialog.animations.PageTABottomRaise;
+import com.knowledge.mnlin.simulatedialog.animations.PageTARightLeftTranslate;
+import com.knowledge.mnlin.simulatedialog.animations.PageTAScale;
+import com.knowledge.mnlin.simulatedialog.animations.PageTATopDown;
 import com.knowledge.mnlin.simulatedialog.interfaces.FullPage;
+import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageCallback;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLauncherType;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLifeCycle;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageTransAnimation;
 import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
 import com.knowledge.mnlin.simulatedialog.plugins.InjectPageAppearanceType;
 import com.knowledge.mnlin.simulatedialog.plugins.InjectPageLauncherType;
@@ -34,32 +44,32 @@ import java.lang.annotation.Annotation;
  */
 public abstract class PageImpl implements PartPage, FullPage {
     private final String TAG = getClass().getCanonicalName();
-
+    /**
+     * animation agent
+     */
+    @NotNull
+    PageTransAnimation transAnimationAgent;
     /**
      * simulated masking effect
      */
     @Nullable
     private
     ShadeMaskView maskForPart;
-
     /**
      * page's  current gradation
      */
     @IntRange(from = PageLifeCycle.PAGE_GRADATION_IDEL, to = PageLifeCycle.PAGE_GRADATION_DETACH_FROM_PARENT)
     private int pageCurrentGradation;
-
     /**
      * holder a instance of content-view
      */
     @Nullable
     private volatile View contentViewHolder;
-
     /**
      * holder a instance of layout-param
      */
     @Nullable
     private volatile ViewGroup.LayoutParams layoutParamHolder;
-
     /**
      * annotation values
      */
@@ -71,13 +81,11 @@ public abstract class PageImpl implements PartPage, FullPage {
     private Integer annotationAppearanceType;
     @Nullable
     private Integer annotationLauncherType;
-
     /**
      * parent cannot be null
      */
     @NotNull
     private PageParent parent;
-
     /**
      * if attach to page-manager,this value is not -1
      */
@@ -107,8 +115,41 @@ public abstract class PageImpl implements PartPage, FullPage {
             // ... other annotation
         }
 
+        // if it's null ,system will set default agent
+        // Set corresponding switch animation for different page types
+        //noinspection ConstantConditions
+        transAnimationAgent = generateTransAnimation(this.parent);
+        if (transAnimationAgent == null) {
+            adoptAnimationStrategy();
+        }
+
         // on-create
         onPageCreate();
+    }
+
+    /**
+     * animation strategy if {@link com.knowledge.mnlin.simulatedialog.interfaces.PageMethodReversal#generateTransAnimation(PageParent)} method not implemented
+     */
+    private void adoptAnimationStrategy() {
+        if (getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART) {
+            if (providerIntegrateParams() instanceof FrameLayout.LayoutParams) {
+                int gravity = ((FrameLayout.LayoutParams) providerIntegrateParams()).gravity;
+                if (gravity == Gravity.CENTER) {
+                    // if gravity is center
+                    transAnimationAgent = PageTAScale.getSingleInstance();
+                } else if ((gravity & Gravity.TOP) == Gravity.TOP) {
+                    transAnimationAgent = PageTATopDown.getSingleInstance();
+                } else if ((gravity & Gravity.BOTTOM) == Gravity.BOTTOM) {
+                    transAnimationAgent = PageTABottomRaise.getSingleInstance();
+                } else {
+                    transAnimationAgent = PageTARightLeftTranslate.getSingleInstance();
+                }
+            } else {
+                transAnimationAgent = PageTABottomRaise.getSingleInstance();
+            }
+        } else {
+            transAnimationAgent = PageTARightLeftTranslate.getSingleInstance();
+        }
     }
 
     /**
@@ -156,12 +197,14 @@ public abstract class PageImpl implements PartPage, FullPage {
      * called after {@link PageLifeCycle#onPageActive()}
      */
     @Override
-    public void onPageReResume() {
-        Logger.v("%s : %s", TAG, "onPageReResume");
+    public void onPageNewIntent() {
+        Logger.v("%s : %s", TAG, "onPageNewIntent");
     }
 
     /**
-     * The page is not visible or partially visible and cannot interact with the user
+     * At this time, page is about to be removed from the view interface
+     * <p>
+     * or it's a background-page (only before part-page that's what happens)
      */
     @Override
     public void onPageDeactive() {
@@ -336,5 +379,47 @@ public abstract class PageImpl implements PartPage, FullPage {
         }
         //noinspection ConstantConditions
         return contentViewHolder;
+    }
+
+    /**
+     * @return {@link PartPage#setMaskDrawable(Drawable)}
+     */
+    @Nullable
+    @Override
+    public Drawable getMaskDrawable() {
+        if (maskForPart != null) {
+            return maskForPart.getDrawable();
+        }
+        return null;
+    }
+
+    /**
+     * @param drawable mask-view-bg
+     */
+    @Override
+    public void setMaskDrawable(Drawable drawable) {
+        if (maskForPart != null) {
+            maskForPart.setImageDrawable(drawable);
+        }
+    }
+
+    @Override
+    public void onPageRecordRightPush(Page page) {
+        transAnimationAgent.onPageRecordRightPush(page);
+    }
+
+    @Override
+    public void onPageRecordLeftInsert(Page page) {
+        transAnimationAgent.onPageRecordLeftInsert(page);
+    }
+
+    @Override
+    public void onPageRecordRightPop(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
+        transAnimationAgent.onPageRecordRightPop(page, mustCalledWhenEndOrCancel);
+    }
+
+    @Override
+    public void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
+        transAnimationAgent.onPageRecordLeftRemove(page, mustCalledWhenEndOrCancel);
     }
 }

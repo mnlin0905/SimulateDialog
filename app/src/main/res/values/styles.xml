@@ -18,5 +18,7 @@
         <!--状态栏透明化,且不占用内容部分,不过此模式时,windowFullscreen属性需要为false-->
         <item name="android:windowTranslucentStatus">true</item>
 
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>

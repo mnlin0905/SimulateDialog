@@ -31,11 +31,11 @@ class MultiFragmentActivity : AppCompatActivity() {
                 SimulateFragmentAdapter(mutableListOf<SimulateFragmentInterface>(
                     DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_first).apply {
                     },
-                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_two).apply {
+                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_second).apply {
                     },
-                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_three).apply {
+                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_third).apply {
                     },
-                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_four).apply {
+                    DefaultSimulateFragmentImpl<MultiFragmentActivity>(this, vp_pager, R.layout.fragment_fourth).apply {
                     }
                 ), mutableListOf("第一", "第二", "第三", "第四"))
         vp_pager.adapter = this.adapter

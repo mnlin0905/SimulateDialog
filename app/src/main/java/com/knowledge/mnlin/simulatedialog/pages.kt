@@ -1,9 +1,9 @@
 package com.knowledge.mnlin.simulatedialog
 
 import com.knowledge.mnlin.sdialog.utils.dOnClick
-import com.knowledge.mnlin.simulatedialog.base.PageImpl
+import com.knowledge.mnlin.simulatedialog.core.PageImpl
 import com.knowledge.mnlin.simulatedialog.plugins.InjectPageLayoutRes
-import kotlinx.android.synthetic.main.fragment_two.view.*
+import kotlinx.android.synthetic.main.fragment_second.view.*
 
 /**************************************
  * function : test activity
@@ -17,33 +17,33 @@ class FirstPage : PageImpl() {
     override fun onPageViewInject() {
         super.onPageViewInject()
         contentView.tv_.dOnClick {
+            pageParent.addPage(SecondPage())
+        }
+    }
+}
+
+@InjectPageLayoutRes(layoutResId = R.layout.fragment_second)
+//@InjectPageLauncherType(pageLauncherType = PageLauncherType.LAUNCHER_SINGLE_TASK)
+class SecondPage : PageImpl() {
+    override fun onPageViewInject() {
+        super.onPageViewInject()
+        contentView.tv_.dOnClick {
             pageParent.addPage(ThirdPage())
         }
     }
 }
 
-@InjectPageLayoutRes(layoutResId = R.layout.fragment_two)
-class SecondPage : PageImpl() {
-    override fun onPageViewInject() {
-        super.onPageViewInject()
-        /* contentView.tv_.dOnClick {
-             pageParent.addPage(ThirdPage())
-         }*/
-    }
-}
-
-@InjectPageLayoutRes(layoutResId = R.layout.fragment_three)
+@InjectPageLayoutRes(layoutResId = R.layout.fragment_third)
 class ThirdPage : PageImpl() {
     override fun onPageViewInject() {
         super.onPageViewInject()
         contentView.tv_.dOnClick {
             pageParent.addPage(FourthPage())
-
         }
     }
 }
 
-@InjectPageLayoutRes(layoutResId = R.layout.fragment_four)
+@InjectPageLayoutRes(layoutResId = R.layout.fragment_fourth)
 class FourthPage : PageImpl() {
     override fun onPageViewInject() {
         super.onPageViewInject()
@@ -61,6 +61,6 @@ class FifthPage : PageImpl() {
     override fun onPageActive() {
         super.onPageActive()
 
-        pageParent.insertPageRecord(3, SecondPage())
+        pageParent.insertPageRecord(4, FirstPage())
     }
 }

@@ -1,15 +1,18 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.util.Log;
 
-import com.knowledge.mnlin.simulatedialog.interfaces.MaskOperateListener;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageLifeCycle;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageMethodPiling;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
+import com.orhanobut.logger.Logger;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +30,8 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
-final class PageManager extends FrameLayout implements PageOperate, MaskOperateListener {
+final class PageManager extends TransitionParent implements PageOperate, ShadeMaskView.MaskOperateListener, PageMethodPiling {
+    private static final String TAG = "PageManager";
     /**
      * is really remove or add page?
      * <p>
@@ -87,7 +91,7 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
         }
 
         // remove page
-        removeView(page.providerContentView());
+        removeView(page);
 
         // remove success or fail,remove record
         boolean result = isRealOperatePage && pageStackRecord.removePage(page);
@@ -100,6 +104,11 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
             ShadeMaskView mask = ((PartPage) page).peekMaskForPart();
             if (mask != null) {
                 removePage(mask);
+
+                // recover to active
+                if (isRealOperatePage) {
+                    findAllPages().getLast().onPageActive();
+                }
             }
         }
 
@@ -133,23 +142,31 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
                 throw new RuntimeException("first page can't be 'part' type");
             }
 
+            // set previous page is deactive
+            findAllPages().get(index - 1).onPageDeactive();
+
             // insert mask
             insertMaskPage((PartPage) page, index++);
         }
 
         // add page ; Page insertion of visual interface is not supported at present
         if (index >= findAllPages().size()) {
-            addView(page.providerContentView(), page.providerIntegrateParams());
+            addView(page, page.providerIntegrateParams());
         } else {
-            addView(page.providerContentView(), 0, page.providerIntegrateParams());
+            addView(page, 0, page.providerIntegrateParams());
         }
 
         // add record
         if (isRealOperatePage) {
             pageStackRecord.insertPage(index, page);
         } else {
-            // on-page-resume
-            page.onPageReResume();
+            // on-page-resume (The interface inserted in the middle will not trigger this method)
+            if (page.getCurrentGradation() > PageLifeCycle.PAGE_GRADATION_ATTACH_TO_PARENT) {
+                page.onPageNewIntent();
+            } else {
+                dispatchPiling();
+                Logger.v("page: %s is insert to record in the background, so we cannot invoke 'onPageNewIntent' method", page.getClass().getCanonicalName());
+            }
         }
 
         // on-page-attach
@@ -162,7 +179,7 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
                 Page destPage = findAllPages().get(position - 1);
 
                 // You do not need to remove views that are not added to the user-interface
-                if (indexOfChild(destPage.providerContentView()) != -1) {
+                if (indexOfChild(destPage) != -1) {
                     isRealOperatePage = false;
                     removePage(destPage);
                     isRealOperatePage = true;
@@ -197,7 +214,7 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
             if (indexInner == 0) {
                 pageStackRecord.findAllPages().add(0, page);
             } else if (findAllPages().indexOf(page) != -1) {
-                throw new RuntimeException("cannot add page who has add to record");
+                Log.w(TAG, "cannot add page who has add to record");
             } else if (indexInner >= findAllPages().size()) {
                 insertPage(indexInner, page);
             } else {
@@ -209,7 +226,7 @@ final class PageManager extends FrameLayout implements PageOperate, MaskOperateL
                 }
 
                 // add record or replace visible page
-                if (indexOfChild(destPage.providerContentView()) == -1) {
+                if (indexOfChild(destPage) == -1) {
                     findAllPages().add(indexInner, page);
                 } else {
                     insertPage(indexInner, page);

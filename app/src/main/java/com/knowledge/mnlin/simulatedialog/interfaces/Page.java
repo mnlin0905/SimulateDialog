@@ -6,6 +6,6 @@ package com.knowledge.mnlin.simulatedialog.interfaces;
  *
  * @author mnlin0905@gmail.com
  */
-public interface Page extends PageLifeCycle, PageProvider, PageLauncherType, PageKeyWatch, PageAppearance, PageMethodReversal, PageChannel<Page> {
+public interface Page extends PageLifeCycle, PageProvider, PageLauncherType, PageKeyWatch, PageAppearance, PageMethodReversal, PageChannel<Page>, PageMethodPiling, PageTransAnimation {
 
 }

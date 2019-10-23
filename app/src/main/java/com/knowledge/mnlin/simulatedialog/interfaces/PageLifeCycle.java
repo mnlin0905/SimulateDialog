@@ -33,6 +33,8 @@ public interface PageLifeCycle {
     /**
      * page added to parent
      * <p>
+     * At this time, page has been added to the view interface
+     * <p>
      * May be called more than once
      *
      * @hide
@@ -41,6 +43,8 @@ public interface PageLifeCycle {
 
     /**
      * page visible and interactive
+     * <p>
+     * At this time , page is in the foreground interface
      */
     void onPageActive();
 
@@ -49,15 +53,19 @@ public interface PageLifeCycle {
      * <p>
      * called after {@link PageLifeCycle#onPageActive()}
      */
-    void onPageReResume();
+    void onPageNewIntent();
 
     /**
-     * The page is not visible or partially visible and cannot interact with the user
+     * At this time, page is about to be removed from the view interface
+     * <p>
+     * or it's a background-page (only before part-page that's what happens)
      */
     void onPageDeactive();
 
     /**
      * page removed from parent
+     * <p>
+     * At this time, page has been removed from the view interface
      * <p>
      * May be called more than once
      *

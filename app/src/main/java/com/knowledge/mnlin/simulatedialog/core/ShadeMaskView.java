@@ -1,4 +1,4 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,16 +7,20 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.knowledge.mnlin.simulatedialog.interfaces.MaskOperateListener;
+import com.knowledge.mnlin.simulatedialog.animations.PageTANoEffect;
+import com.knowledge.mnlin.simulatedialog.interfaces.FullPage;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageCallback;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLauncherType;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLifeCycle;
+import com.knowledge.mnlin.simulatedialog.interfaces.PageTransAnimation;
 import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author mnlin0905@gmail.com
  */
-public final class ShadeMaskView extends FrameLayout implements View.OnClickListener, Page {
+public final class ShadeMaskView extends AppCompatImageView implements View.OnClickListener, FullPage {
     /**
      * dimen bg-drawable
      */
@@ -45,6 +49,11 @@ public final class ShadeMaskView extends FrameLayout implements View.OnClickList
     @NotNull
     private PartPage hostPage;
 
+    /**
+     * default no effect
+     */
+    PageTransAnimation animationForMask = PageTANoEffect.getSingleInstance();
+
     {
         maskDrawable = new ColorDrawable(Color.parseColor("#00000000"));
     }
@@ -58,16 +67,12 @@ public final class ShadeMaskView extends FrameLayout implements View.OnClickList
     }
 
     public ShadeMaskView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, defStyleAttr);
-    }
-
-    public ShadeMaskView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
 
         // init the mask
         setBackground(maskDrawable);
         setOnClickListener(this);
-        setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     /**
@@ -169,12 +174,14 @@ public final class ShadeMaskView extends FrameLayout implements View.OnClickList
      * called after {@link PageLifeCycle#onPageActive()}
      */
     @Override
-    public void onPageReResume() {
+    public void onPageNewIntent() {
 
     }
 
     /**
-     * The page is not visible or partially visible and cannot interact with the user
+     * At this time, page is about to be removed from the view interface
+     * <p>
+     * or it's a background-page (only before part-page that's what happens)
      */
     @Override
     public void onPageDeactive() {
@@ -241,5 +248,37 @@ public final class ShadeMaskView extends FrameLayout implements View.OnClickList
     ShadeMaskView setHostPage(@NotNull PartPage hostPage) {
         this.hostPage = hostPage;
         return this;
+    }
+
+    @Override
+    public void onPageRecordRightPush(Page page) {
+        animationForMask.onPageRecordRightPush(page);
+    }
+
+    @Override
+    public void onPageRecordLeftInsert(Page page) {
+        animationForMask.onPageRecordLeftInsert(page);
+    }
+
+    @Override
+    public void onPageRecordRightPop(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
+        animationForMask.onPageRecordRightPop(page, mustCalledWhenEndOrCancel);
+    }
+
+    @Override
+    public void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
+        animationForMask.onPageRecordLeftRemove(page, mustCalledWhenEndOrCancel);
+    }
+
+    /**
+     * dispatch the mask's action
+     */
+    public interface MaskOperateListener {
+        /**
+         * dispatch the click action
+         *
+         * @param mask target
+         */
+        void dispatchMaskOnClick(@NonNull ShadeMaskView mask);
     }
 }

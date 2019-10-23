@@ -14,6 +14,9 @@ public interface PageAppearance {
      */
     int PAGE_APPEARANCE_FULLSCREEN = 0x00000000;
 
+    /**
+     * Page with transparent background or window type
+     */
     int PAGE_APPEARANCE_PART = 0x00000001;
 
     /**

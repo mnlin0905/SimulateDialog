@@ -1,6 +1,6 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.interfaces;
 
-import com.knowledge.mnlin.simulatedialog.interfaces.Page;
+import com.knowledge.mnlin.simulatedialog.core.PageParent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
- interface PageOperate {
+public interface PageOperate {
     /**
      * remove record
      *

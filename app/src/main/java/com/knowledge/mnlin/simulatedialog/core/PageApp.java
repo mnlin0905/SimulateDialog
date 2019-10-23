@@ -1,7 +1,9 @@
-package com.knowledge.mnlin.simulatedialog.base;
+package com.knowledge.mnlin.simulatedialog.core;
 
 import android.app.Application;
+import android.util.Log;
 
+import com.blankj.utilcode.util.Utils;
 import com.knowledge.mnlin.simulatedialog.R;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -22,6 +24,7 @@ public class PageApp extends Application {
         super.onCreate();
 
         initLogger();
+        Utils.init(this);
     }
 
     /**
@@ -43,9 +46,9 @@ public class PageApp extends Application {
 
             @Override
             public void log(int priority, String tag, String message) {
-                super.log(priority, tag, message);
+                Log.e("PageApp=== ", message);
+                // super.log(priority, tag, message);
             }
         });
     }
-
 }

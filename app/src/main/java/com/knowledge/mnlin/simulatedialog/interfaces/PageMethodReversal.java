@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.knowledge.mnlin.simulatedialog.base.PageImpl;
-import com.knowledge.mnlin.simulatedialog.base.PageParent;
+import com.knowledge.mnlin.simulatedialog.core.PageImpl;
+import com.knowledge.mnlin.simulatedialog.core.PageParent;
 
 /**
  * Created on 2019/10/15  11:28
@@ -41,6 +41,16 @@ public interface PageMethodReversal {
      */
     @Nullable
     default ViewGroup.LayoutParams generateLayoutParams(@NonNull PageParent pageParent) {
+        ensureCalledMethodIsLegal();
+        return null;
+    }
+
+    /**
+     * @param pageParent PageParent
+     * @return real layout-params of page
+     */
+    @Nullable
+    default PageTransAnimation generateTransAnimation(@NonNull PageParent pageParent) {
         ensureCalledMethodIsLegal();
         return null;
     }

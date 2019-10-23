@@ -1,9 +1,10 @@
 package com.knowledge.mnlin.simulatedialog.interfaces;
 
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.knowledge.mnlin.simulatedialog.base.ShadeMaskView;
+import com.knowledge.mnlin.simulatedialog.core.ShadeMaskView;
 
 /**
  * Created on 2019/10/16  12:10
@@ -30,7 +31,18 @@ public interface PartPage extends Page {
     /**
      * @return closed if click mask (outside of page)
      */
-    default boolean closedOnClickOutside(){
+    default boolean closedOnClickOutside() {
         return true;
     }
+
+    /**
+     * @return {@link PartPage#setMaskDrawable(Drawable)}
+     */
+    @Nullable
+    Drawable getMaskDrawable();
+
+    /**
+     * @param background mask-view-bg
+     */
+    void setMaskDrawable(Drawable drawable);
 }
