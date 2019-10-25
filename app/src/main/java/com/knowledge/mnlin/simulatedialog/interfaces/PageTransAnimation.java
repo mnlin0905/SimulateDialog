@@ -20,7 +20,7 @@ public interface PageTransAnimation {
     void onPageRecordRightPush(Page page);
 
     /**
-     * in {@link com.knowledge.mnlin.simulatedialog.core.PageStackRecord} , page insert to front
+     * in {@link com.knowledge.mnlin.simulatedialog.core.PageStackRecord} , page insertPage to front
      *
      * @param page page
      */
@@ -41,4 +41,25 @@ public interface PageTransAnimation {
      * @param mustCalledWhenEndOrCancel must call this method to prevent child's visible
      */
     void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel);
+
+    /**
+     * Return to Attach state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    void returnToAttachStatus(Page page);
+
+    /**
+     * Return to the Detach state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    void returnToDetachStatus(Page page);
+
+    /**
+     * cancel the animation if necessary
+     *
+     * @param page page
+     */
+    void cancelPageAnimation(Page page);
 }

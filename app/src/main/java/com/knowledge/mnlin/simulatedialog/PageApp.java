@@ -1,10 +1,9 @@
-package com.knowledge.mnlin.simulatedialog.core;
+package com.knowledge.mnlin.simulatedialog;
 
 import android.app.Application;
 import android.util.Log;
 
 import com.blankj.utilcode.util.Utils;
-import com.knowledge.mnlin.simulatedialog.R;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.LogStrategy;

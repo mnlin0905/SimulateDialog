@@ -18,7 +18,8 @@ import com.knowledge.mnlin.simulatedialog.R
  * @author mnlin
  **************************************/
 
-open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFragmentInterface,FragmentStatusChangedListener {
+open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFragmentInterface,
+    FragmentStatusChangedListener {
     /**
      * 保持布局不变(该contentView根部局包含了自身的FrameLayout)
      *
@@ -50,15 +51,22 @@ open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFrag
 
     constructor(context: Context) : this(context, attrs = null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         //获取需要加载的布局
         val array = context.obtainStyledAttributes(attrs, R.styleable.DefaultSimulateFragmentImpl)
-        val layoutId = array.getResourceId(R.styleable.DefaultSimulateFragmentImpl_DefaultSimulateFragmentImpl_layout, -1)
+        val layoutId = array.getResourceId(
+            R.styleable.DefaultSimulateFragmentImpl_DefaultSimulateFragmentImpl_layout,
+            -1
+        )
 
         //如果有放置 Fragment 的layout文件布局,则进行加载
         if (layoutId != -1) {
             layoutResId = layoutId
-        }else{
+        } else {
             print("layoutResid为null")
         }
 
@@ -75,10 +83,10 @@ open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFrag
      * @param Container 容器布局,即加载 该Fragment 的布局
      */
     constructor(
-            context: Context,
-            Container: ViewGroup,
-            @LayoutRes layoutRes: Int? = null,
-            childView: View? = null
+        context: Context,
+        Container: ViewGroup,
+        @LayoutRes layoutRes: Int? = null,
+        childView: View? = null
     ) : super(context) {
         contentView = when {
             layoutRes != null -> LayoutInflater.from(context).inflate(layoutRes, Container, false)
@@ -134,7 +142,7 @@ open class DefaultSimulateFragmentImpl<T : Activity> : FrameLayout, SimulateFrag
         if (!isInEditMode) {
             contentView = layoutResId?.let {
                 LayoutInflater.from(getActivityFromView()).inflate(it, this, true)
-            }?: contentView
+            } ?: contentView
         } else {
             layoutResId?.let {
                 LayoutInflater.from(this.context).inflate(it, this, true)

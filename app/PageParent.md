@@ -14,7 +14,7 @@ PageParent 需要实现的功能:
  * 处理添加 page 的逻辑,拥有管理路由的功能,即 PageStackRecord : OK
  * 处理返回按钮等跳转逻辑,重写系统 key-listener : OK
  * page 的显示隐藏等交由具体的模块来完成,即容器类 PageManager : OK
- * 界面参数功能
+ * 界面参数功能(伴随路由跳转框架来传值) : 
 
 优势:
 
@@ -26,8 +26,6 @@ PageParent 需要实现的功能:
  * 只有 view 存在,不需要创建多余的对象
 
 
-
-
 ## 待实现逻辑
 
  1. 添加子child时动效 : LayoutTransition : OK ,支持扩展
@@ -36,6 +34,7 @@ PageParent 需要实现的功能:
  4. 切换屏幕时动画处理 ( 同 1),以及共享动画如何配置 
  5. 编译时注解,避免反射调用 : 
  6. mask-view 可设置背景(dialog的遮罩效果) : OK
+ 7. Page 支持 adapter 
 
 
 ## 页面方法调用流程

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageAppearance;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageLifeCycle;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageMethodPiling;
-import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 import com.knowledge.mnlin.simulatedialog.interfaces.PartPage;
 import com.orhanobut.logger.Logger;
 
@@ -30,8 +28,9 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
-final class PageManager extends TransitionParent implements PageOperate, ShadeMaskView.MaskOperateListener, PageMethodPiling {
+public final class PageManager extends TransitionParent implements ShadeMaskView.MaskOperateListener, PageMethodPiling {
     private static final String TAG = "PageManager";
+
     /**
      * is really remove or add page?
      * <p>
@@ -70,13 +69,14 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
     }
 
     /**
-     * remove record
+     * remove page
+     * <p>
+     * must ensure page has added to {@link PageStackRecord},otherwise program will crash
      *
      * @param page {@link Page}
      * @return true if remove success , false if record remain
      */
-    @Override
-    public final boolean removePage(@NotNull Page page) {
+    final boolean removePage(@NotNull Page page) {
         // on-page-deactivate
         page.onPageDeactive();
 
@@ -107,7 +107,8 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
 
                 // recover to active
                 if (isRealOperatePage) {
-                    findAllPages().getLast().onPageActive();
+                    Page last = findAllPages().getLast();
+                    last.onPageActive();
                 }
             }
         }
@@ -124,18 +125,17 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
     }
 
     /**
-     * insert record
+     * insertPage record
      * <p>
      * attend:
-     * 1 page has insert into {@link PageStackRecord} or index larger than {@link PageStackRecord}'s size; otherwise ,please call {@link PageManager#insertPageRecord(int, Page)}
+     * 1 page has insertPage into {@link PageStackRecord} or index larger than {@link PageStackRecord}'s size; otherwise ,please call {@link PageManager#insertPageRecord(int, Page)}
      * 2 This method should not be called directly
      *
      * @param page  {@link Page}
      * @param index the index of page who required add
      * @throws RuntimeException if first page is "part" type
      */
-    @Override
-    public final void insertPage(int index, @NotNull Page page) {
+    final void insertPage(int index, @NotNull Page page) {
         // if page is not fullscreen , add mask-view
         if (isRealOperatePage && page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART && page instanceof PartPage) {
             if (findAllPages().size() == 0) {
@@ -145,27 +145,28 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
             // set previous page is deactive
             findAllPages().get(index - 1).onPageDeactive();
 
-            // insert mask
+            // insertPage mask
             insertMaskPage((PartPage) page, index++);
         }
 
         // add page ; Page insertion of visual interface is not supported at present
         if (index >= findAllPages().size()) {
-            addView(page, page.providerIntegrateParams());
+            addView(page);
         } else {
-            addView(page, 0, page.providerIntegrateParams());
+            addView(page, 0);
         }
 
         // add record
         if (isRealOperatePage) {
             pageStackRecord.insertPage(index, page);
         } else {
-            // on-page-resume (The interface inserted in the middle will not trigger this method)
-            if (page.getCurrentGradation() > PageLifeCycle.PAGE_GRADATION_ATTACH_TO_PARENT) {
-                page.onPageNewIntent();
+            Logger.v(TAG, "*****************");// on-page-resume (The interface inserted in the middle will not trigger this method)
+            if (page.getCurrentGradation() > PageLifeCycle.PAGE_GRADATION_ATTACH_TO_PARENT
+                    && page.getCurrentGradation() < PageLifeCycle.PAGE_GRADATION_DETACH_FROM_PARENT) {
+                //page.onPageReResume();
             } else {
                 dispatchPiling();
-                Logger.v("page: %s is insert to record in the background, so we cannot invoke 'onPageNewIntent' method", page.getClass().getCanonicalName());
+                //Logger.v("page: %s is insertPage to record in the background, so we cannot invoke 'onPageReResume' method", page.getClass().getCanonicalName());
             }
         }
 
@@ -187,8 +188,10 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
             }
         }
 
-        // on-page-activate
-        page.onPageActive();
+        // on-page-activate(if page is last)
+        if (isRealOperatePage && index == findAllPages().size() - 1) {
+            page.onPageActive();
+        }
 
         // mask-view needs to be loaded before "part" in "isRealOperatePage" process
         if (!isRealOperatePage && page.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART && page instanceof PartPage) {
@@ -197,46 +200,7 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
     }
 
     /**
-     * insert page
-     * <p>
-     * Please use this method carefully, which may cause confusion of interface layout.
-     *
-     * @param index index to insert
-     * @param page  dest page
-     * @throws RuntimeException If page already exists in the record
-     */
-    public void insertPageRecord(final int index, @NotNull Page page) {
-        // prevent impact on ongoing page operations
-        post(() -> {
-            int indexInner = index;
-
-            // judge index's legality
-            if (indexInner == 0) {
-                pageStackRecord.findAllPages().add(0, page);
-            } else if (findAllPages().indexOf(page) != -1) {
-                Log.w(TAG, "cannot add page who has add to record");
-            } else if (indexInner >= findAllPages().size()) {
-                insertPage(indexInner, page);
-            } else {
-                Page destPage = findAllPages().get(indexInner);
-
-                // It is not allowed to insert page directly before "part"
-                if (destPage.getPageAppearanceType() == PageAppearance.PAGE_APPEARANCE_PART) {
-                    destPage = findAllPages().get(--indexInner);
-                }
-
-                // add record or replace visible page
-                if (indexOfChild(destPage) == -1) {
-                    findAllPages().add(indexInner, page);
-                } else {
-                    insertPage(indexInner, page);
-                }
-            }
-        });
-    }
-
-    /**
-     * insert mask-page
+     * insertPage mask-page
      *
      * @param host  host
      * @param index index
@@ -244,9 +208,8 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
     private void insertMaskPage(PartPage host, int index) {
         ShadeMaskView mask = host.peekMaskForPart();
         if (mask == null) {
-            mask = new ShadeMaskView(getContext()).setMaskOperateListener(this).setHostPage(host);
+            mask = new ShadeMaskView(getContext(), host).setMaskOperateListener(this);
             insertPage(index, mask);
-            host.injectMaskForPart(mask);
         } else {
             insertPage(index, mask);
 
@@ -265,19 +228,13 @@ final class PageManager extends TransitionParent implements PageOperate, ShadeMa
      * @return index corresponding to record
      */
     @Nullable
-    @Override
-    public Page findPage(int index) {
+    Page findPage(int index) {
         return pageStackRecord.findPage(index);
     }
 
-    /**
-     * get all pages
-     *
-     * @return all pages
-     */
     @NotNull
     @Override
-    public LinkedList<Page> findAllPages() {
+    protected final LinkedList<Page> findAllPages() {
         return pageStackRecord.findAllPages();
     }
 

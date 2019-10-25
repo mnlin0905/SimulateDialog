@@ -53,7 +53,7 @@ public interface PageLifeCycle {
      * <p>
      * called after {@link PageLifeCycle#onPageActive()}
      */
-    void onPageNewIntent();
+    void onPageReResume();
 
     /**
      * At this time, page is about to be removed from the view interface

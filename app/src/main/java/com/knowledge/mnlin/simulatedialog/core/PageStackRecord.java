@@ -1,7 +1,6 @@
 package com.knowledge.mnlin.simulatedialog.core;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
-import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ import java.util.LinkedList;
  *
  * @author mnlin0905@gmail.com
  */
-final class PageStackRecord implements PageOperate {
+final class PageStackRecord {
     /**
      * record page
      */
@@ -25,19 +24,17 @@ final class PageStackRecord implements PageOperate {
     /**
      * @param page {@link Page}
      */
-    @Override
-    public boolean removePage(@NotNull Page page) {
+    boolean removePage(@NotNull Page page) {
         return records.remove(page);
     }
 
     /**
-     * insert record
+     * insertPage record
      *
      * @param page  {@link Page}
      * @param index the index of page who required add
      */
-    @Override
-    public void insertPage(int index, @NotNull Page page) {
+    void insertPage(int index, @NotNull Page page) {
         records.add(index, page);
     }
 
@@ -46,8 +43,7 @@ final class PageStackRecord implements PageOperate {
      * @return index corresponding to record
      */
     @Nullable
-    @Override
-    public Page findPage(int index) {
+    Page findPage(int index) {
         if (records.size() > index) {
             return records.get(index);
         }
@@ -60,8 +56,7 @@ final class PageStackRecord implements PageOperate {
      * @return all pages
      */
     @NotNull
-    @Override
-    public LinkedList<Page> findAllPages() {
+    LinkedList<Page> findAllPages() {
         return records;
     }
 }

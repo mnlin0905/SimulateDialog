@@ -44,7 +44,7 @@ public class PageTAScale implements PageTransAnimation {
     }
 
     /**
-     * in {@link PageStackRecord} , page insert to front
+     * in {@link PageStackRecord} , page insertPage to front
      *
      * @param page page
      */
@@ -91,5 +91,39 @@ public class PageTAScale implements PageTransAnimation {
     @Override
     public void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
         onPageRecordRightPop(page, mustCalledWhenEndOrCancel);
+    }
+
+    /**
+     * Return to the normal display state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    @Override
+    public void returnToAttachStatus(Page page) {
+        View view = page.providerContentView();
+        view.setScaleX(1);
+        view.setScaleY(1);
+    }
+
+    /**
+     * Return to the Detach state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    @Override
+    public void returnToDetachStatus(Page page) {
+        View view = page.providerContentView();
+        view.setScaleX(0);
+        view.setScaleY(0);
+    }
+
+    /**
+     * cancel the animation if necessary
+     *
+     * @param page page
+     */
+    @Override
+    public void cancelPageAnimation(Page page) {
+        page.providerContentView().animate().cancel();
     }
 }

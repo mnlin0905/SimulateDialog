@@ -1,6 +1,6 @@
 package com.knowledge.mnlin.simulatedialog.interfaces;
 
-import com.knowledge.mnlin.simulatedialog.core.PageConfigs;
+import com.knowledge.mnlin.simulatedialog.configs.PageConfigs;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,7 +19,7 @@ public interface PageMethodPiling {
      * For users to operate
      */
     default void dispatchPiling() {
-        if (PageConfigs.openMethodPiling) {
+        if (PageConfigs.sOpenMethodPiling) {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
             StackTraceElement[] stackUseful = Arrays.copyOfRange(stackTrace, 3, stackTrace.length);
             for (MethodPilingCallback callback : methodPilingCallback) {

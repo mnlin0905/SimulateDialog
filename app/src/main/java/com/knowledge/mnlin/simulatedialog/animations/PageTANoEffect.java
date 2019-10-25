@@ -47,4 +47,17 @@ public class PageTANoEffect implements PageTransAnimation {
     public void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
         mustCalledWhenEndOrCancel.run(page);
     }
+
+    @Override
+    public void returnToAttachStatus(Page page) {
+
+    }
+
+    @Override
+    public void returnToDetachStatus(Page page) {
+    }
+
+    @Override
+    public void cancelPageAnimation(Page page) {
+    }
 }

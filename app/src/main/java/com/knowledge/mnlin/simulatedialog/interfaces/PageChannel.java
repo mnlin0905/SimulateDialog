@@ -2,6 +2,7 @@ package com.knowledge.mnlin.simulatedialog.interfaces;
 
 import android.support.annotation.NonNull;
 
+import com.knowledge.mnlin.simulatedialog.core.PageContext;
 import com.knowledge.mnlin.simulatedialog.core.PageParent;
 
 /**
@@ -18,7 +19,7 @@ public interface PageChannel<T extends PageChannel> {
      * @return {@link PageParent}
      */
     @NonNull
-    PageParent getPageParent();
+    PageContext getPageContext();
 
     /**
      * @return index in {@link com.knowledge.mnlin.simulatedialog.core.PageStackRecord} ; -1 if not attach to {@link com.knowledge.mnlin.simulatedialog.core.PageManager}

@@ -1,7 +1,9 @@
 package com.knowledge.mnlin.simulatedialog.core;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -31,7 +33,13 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author mnlin0905@gmail.com
  */
+@SuppressLint("ViewConstructor")
 public final class ShadeMaskView extends AppCompatImageView implements View.OnClickListener, FullPage {
+    /**
+     * default no effect
+     */
+    PageTransAnimation animationForMask = PageTANoEffect.getSingleInstance();
+
     /**
      * dimen bg-drawable
      */
@@ -49,27 +57,24 @@ public final class ShadeMaskView extends AppCompatImageView implements View.OnCl
     @NotNull
     private PartPage hostPage;
 
-    /**
-     * default no effect
-     */
-    PageTransAnimation animationForMask = PageTANoEffect.getSingleInstance();
-
     {
         maskDrawable = new ColorDrawable(Color.parseColor("#00000000"));
     }
 
-    public ShadeMaskView(@NonNull Context context) {
-        this(context, null);
+    public ShadeMaskView(@NonNull Context context, @NotNull PartPage hostPage) {
+        this(context, hostPage, null);
     }
 
-    public ShadeMaskView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public ShadeMaskView(@NonNull Context context, @NotNull PartPage hostPage, @Nullable AttributeSet attrs) {
+        this(context, hostPage, attrs, 0);
     }
 
-    public ShadeMaskView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ShadeMaskView(@NonNull Context context, @NotNull PartPage hostPage, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         // init the mask
+        this.hostPage = hostPage;
+        hostPage.injectMaskForPart(this);
         setBackground(maskDrawable);
         setOnClickListener(this);
         setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -102,12 +107,12 @@ public final class ShadeMaskView extends AppCompatImageView implements View.OnCl
     /**
      * page must relative context(if has be added to parent)
      *
-     * @return {@link PageParent}
+     * @return {@link PageContext}
      */
-    @NonNull
+    @NotNull
     @Override
-    public PageParent getPageParent() {
-        return PageParent.instance;
+    public PageContext getPageContext() {
+        return hostPage.getPageContext();
     }
 
     /**
@@ -174,7 +179,7 @@ public final class ShadeMaskView extends AppCompatImageView implements View.OnCl
      * called after {@link PageLifeCycle#onPageActive()}
      */
     @Override
-    public void onPageNewIntent() {
+    public void onPageReResume() {
 
     }
 
@@ -251,23 +256,46 @@ public final class ShadeMaskView extends AppCompatImageView implements View.OnCl
     }
 
     @Override
-    public void onPageRecordRightPush(Page page) {
-        animationForMask.onPageRecordRightPush(page);
+    public void performPageRecordRightPush() {
+        animationForMask.onPageRecordRightPush(this);
     }
 
     @Override
-    public void onPageRecordLeftInsert(Page page) {
-        animationForMask.onPageRecordLeftInsert(page);
+    public void performPageRecordLeftInsert() {
+        animationForMask.onPageRecordLeftInsert(this);
     }
 
     @Override
-    public void onPageRecordRightPop(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
-        animationForMask.onPageRecordRightPop(page, mustCalledWhenEndOrCancel);
+    public void performPageRecordRightPop(PageCallback<Page> mustCalledWhenEndOrCancel) {
+        animationForMask.onPageRecordRightPop(this, mustCalledWhenEndOrCancel);
     }
 
     @Override
-    public void onPageRecordLeftRemove(Page page, PageCallback<Page> mustCalledWhenEndOrCancel) {
-        animationForMask.onPageRecordLeftRemove(page, mustCalledWhenEndOrCancel);
+    public void performPageRecordLeftRemove(PageCallback<Page> mustCalledWhenEndOrCancel) {
+        animationForMask.onPageRecordLeftRemove(this, mustCalledWhenEndOrCancel);
+    }
+
+    @Override
+    public void performReturnToAttachStatus() {
+        animationForMask.returnToAttachStatus(this);
+    }
+
+    @Override
+    public void performReturnToDetachStatus() {
+        animationForMask.returnToDetachStatus(this);
+    }
+
+    @Override
+    public void performCancelPageAnimation() {
+        animationForMask.cancelPageAnimation(this);
+    }
+
+    /**
+     * mask-view cannot dispatch the system-event
+     */
+    @Override
+    public boolean dispatchOnNewIntent(@Nullable Intent newIntent) {
+        return false;
     }
 
     /**

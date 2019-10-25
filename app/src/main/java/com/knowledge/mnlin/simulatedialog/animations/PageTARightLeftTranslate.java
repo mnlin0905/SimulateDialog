@@ -20,6 +20,7 @@ public class PageTARightLeftTranslate implements PageTransAnimation {
      * variable holder
      */
     private static final int screenWidth = ScreenUtils.getScreenWidth();
+
     private static final int screenHeight = ScreenUtils.getScreenHeight();
 
     /**
@@ -50,7 +51,7 @@ public class PageTARightLeftTranslate implements PageTransAnimation {
     }
 
     /**
-     * in {@link PageStackRecord} , page insert to front
+     * in {@link PageStackRecord} , page insertPage to front
      *
      * @param page page
      */
@@ -113,5 +114,35 @@ public class PageTARightLeftTranslate implements PageTransAnimation {
                     }
                 })
                 .start();
+    }
+
+    /**
+     * Return to the normal display state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    @Override
+    public void returnToAttachStatus(Page page) {
+        page.providerContentView().setTranslationX(0);
+    }
+
+    /**
+     * Return to the Detach state to ensure that the page can recover.
+     *
+     * @param page page
+     */
+    @Override
+    public void returnToDetachStatus(Page page) {
+        page.providerContentView().setTranslationX(screenWidth);
+    }
+
+    /**
+     * cancel the animation if necessary
+     *
+     * @param page page
+     */
+    @Override
+    public void cancelPageAnimation(Page page) {
+        page.providerContentView().animate().cancel();
     }
 }

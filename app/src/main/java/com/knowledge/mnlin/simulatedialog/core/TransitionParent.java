@@ -5,17 +5,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
 import com.knowledge.mnlin.simulatedialog.interfaces.PageCallback;
-import com.knowledge.mnlin.simulatedialog.interfaces.PageOperate;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created on 2019/10/22  15:31
@@ -23,18 +22,19 @@ import java.util.List;
  *
  * @author mnlin0905@gmail.com
  */
-abstract class TransitionParent extends FrameLayout implements PageOperate {
+abstract class TransitionParent extends FrameLayout {
     /**
      * store the view who in remove animation
      */
-    private List<Page> removedCaches = new LinkedList<>();
+    private List<Page> removedCaches = new CopyOnWriteArrayList<>();
 
     /**
      * At the end of the animation, make sure that the view is removed and the traces are removed
      */
     private PageCallback<Page> mustBeCalledWhenRemoved = tag -> {
-        removedCaches.remove(tag);
-        removeView(tag.providerContentView());
+        if (removedCaches.remove(tag)) {
+            removeView(tag.providerContentView());
+        }
     };
 
     public TransitionParent(@NonNull Context context) {
@@ -56,26 +56,34 @@ abstract class TransitionParent extends FrameLayout implements PageOperate {
     /**
      * add for {@link PageManager}
      */
-    public void addView(Page page, ViewGroup.LayoutParams params) {
-        this.addView(page, -1, params);
+    public void addView(Page page) {
+        this.addView(page, -1);
     }
 
     /**
      * add for {@link PageManager
      */
-    public void addView(Page page, int index, ViewGroup.LayoutParams params) {
+    public void addView(Page page, int index) {
+        // if page will be removed ,but already in the removedCaches'' list(Actually not removed),we only should remove on 'removedCaches'
+        if (removedCaches.indexOf(page) != -1) {
+            removedCaches.remove(page);
+            page.performCancelPageAnimation();
+            page.performReturnToAttachStatus();
+            return;
+        }
+
         View view = page.providerContentView();
 
-        super.addView(view, index, params);
+        super.addView(view, index, page.providerIntegrateParams());
 
         // The first view cannot be animated
         if (getChildCount() > 1) {
             // Distinguish animation executed in different time periods
             if (index == getChildCount() || index == -1) {
                 // is first add to record
-                page.onPageRecordRightPush(page);
+                page.performPageRecordRightPush();
             } else {
-                page.onPageRecordLeftInsert(page);
+                page.performPageRecordLeftInsert();
             }
         }
     }
@@ -88,11 +96,13 @@ abstract class TransitionParent extends FrameLayout implements PageOperate {
 
         // The first view cannot be animated
         if (getChildCount() > 1) {
+            removedCaches.add(page);
             if (findAllPages().getLast() == page) {
-                page.onPageRecordRightPop(page, mustBeCalledWhenRemoved);
+                page.performPageRecordRightPop(mustBeCalledWhenRemoved);
             } else {
-                page.onPageRecordLeftRemove(page, mustBeCalledWhenRemoved);
+                page.performPageRecordLeftRemove(mustBeCalledWhenRemoved);
             }
+            return;
         }
 
         removeView(view);
@@ -104,4 +114,16 @@ abstract class TransitionParent extends FrameLayout implements PageOperate {
     public int indexOfChild(Page page) {
         return removedCaches.indexOf(page) == -1 ? indexOfChild(page.providerContentView()) : -1;
     }
+
+    @Override
+    public int getChildCount() {
+        return super.getChildCount();
+    }
+
+    /**
+     * get all pages in {@link PageStackRecord}
+     *
+     * @return all pages
+     */
+    protected abstract LinkedList<Page> findAllPages();
 }
