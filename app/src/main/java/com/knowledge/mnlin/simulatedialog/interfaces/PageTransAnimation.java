@@ -10,7 +10,7 @@ public interface PageTransAnimation {
     /**
      * default animation duration
      */
-    long DEFAULT_PAGE_TRANS_DURATION = 300L;
+    long DEFAULT_PAGE_TRANS_DURATION = 2000L;
 
     /**
      * in {@link com.knowledge.mnlin.simulatedialog.core.PageStackRecord} , page add to end
@@ -62,4 +62,13 @@ public interface PageTransAnimation {
      * @param page page
      */
     void cancelPageAnimation(Page page);
+
+    /**
+     * the animation priority , A higher value indicates a higher priority
+     *
+     * @return priority,a higher value indicates a higher priority
+     */
+    default int getLevel() {
+        return 0;
+    }
 }

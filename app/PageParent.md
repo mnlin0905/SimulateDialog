@@ -34,7 +34,7 @@ PageParent 需要实现的功能:
  4. 切换屏幕时动画处理 ( 同 1),以及共享动画如何配置 
  5. 编译时注解,避免反射调用 : 
  6. mask-view 可设置背景(dialog的遮罩效果) : OK
- 7. Page 支持 adapter 
+ 7. Page 支持 adapter  : OK
 
 
 ## 页面方法调用流程

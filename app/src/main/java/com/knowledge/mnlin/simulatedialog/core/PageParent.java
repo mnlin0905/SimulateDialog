@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.knowledge.mnlin.simulatedialog.FirstPage;
 import com.knowledge.mnlin.simulatedialog.R;
 import com.knowledge.mnlin.simulatedialog.configs.PageConfigs;
 import com.knowledge.mnlin.simulatedialog.interfaces.Page;
@@ -82,8 +81,8 @@ public class PageParent extends AppCompatActivity {
         pageManager = findViewById(R.id.vg_page_route);
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // TODO enter of page-app
-        addPage(new FirstPage());
+        // enter - point
+        addPage(PageProcessor$EnterPoint.getPageEnterPoint());
     }
 
     @Override

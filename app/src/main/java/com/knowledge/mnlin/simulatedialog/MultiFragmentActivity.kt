@@ -41,7 +41,6 @@ class MultiFragmentActivity : AppCompatActivity() {
         vp_pager.adapter = this.adapter
         tl_tab.setupWithViewPager(vp_pager)
 
-
         //底部导航栏: 被点击 -> 通知 view-pager 滑动
         bv_navigation.setOnNavigationItemSelectedListener {
             if (vp_pager.currentItem != it.order) {
