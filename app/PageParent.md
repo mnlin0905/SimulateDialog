@@ -28,13 +28,13 @@ PageParent 需要实现的功能:
 
 ## 待实现逻辑
 
- 1. 添加子child时动效 : LayoutTransition : OK ,支持扩展
+ 1. 添加子child时动效 :  OK ,支持扩展
  2. 界面插入,a->b,在两个page中插入c,变成 a->c->b,支持part-page前插入page : ok
- 3. 首次启动界面如何配置
- 4. 切换屏幕时动画处理 ( 同 1),以及共享动画如何配置 
- 5. 编译时注解,避免反射调用 : 
+ 3. 首次启动界面如何配置 : OK ,添加class时注解,配置"PageProcessor$EnterPoint" 类
+ 4. 切换屏幕时动画处理 ( 同 1) ; OK 
+ 5. 以及共享动画如何配置  
  6. mask-view 可设置背景(dialog的遮罩效果) : OK
- 7. Page 支持 adapter  : OK
+ 7. Page 支持 adapter  : OK 
 
 
 ## 页面方法调用流程

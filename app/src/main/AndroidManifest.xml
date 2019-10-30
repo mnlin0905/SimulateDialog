@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.knowledge.mnlin.simulatedialog">
+    package="com.knowledge.mnlin.page">
 
     <application
-        android:name=".PageApp"
+        android:name="com.knowledge.mnlin.page.PageApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +15,7 @@
         tools:replace="android:label,android:name">
 
         <!--程序入口-->
-        <activity android:name=".core.PageParent">
+        <activity android:name="com.knowledge.mnlin.page.core.PageParent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

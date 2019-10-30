@@ -17,23 +17,23 @@
         android:gravity="center"
         android:text="显示前一" />
 
-    <com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl
+    <com.knowledge.mnlin.page.sfragment.DefaultSimulateFragmentImpl
         android:id="@+id/ssf_one"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:DefaultSimulateFragmentImpl_layout="@layout/dialog_first">
 
-    </com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl>
+    </com.knowledge.mnlin.page.sfragment.DefaultSimulateFragmentImpl>
 
-    <com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl
+    <com.knowledge.mnlin.page.sfragment.DefaultSimulateFragmentImpl
         android:id="@+id/ssf_two"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:DefaultSimulateFragmentImpl_layout="@layout/dialog_second">
 
-    </com.knowledge.mnlin.simulatedialog.sfragment.DefaultSimulateFragmentImpl>
+    </com.knowledge.mnlin.page.sfragment.DefaultSimulateFragmentImpl>
 
     <!--后面部分-->
     <TextView
