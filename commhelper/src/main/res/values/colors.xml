@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!--透明色-->
+    <color name="transparent_mask">#33000000</color>
+    <color name="transparent_mask_f0edfe">#f0edfe</color>
+
+    <!--//////////////////////////////////////-->
+    <!--//////////////////////////////////// 规范 UI 部分 -start -->
+    <!--//////////////////////////////////////-->
+    <!--系统规范toolbar-accent色调-->
+    <!--#00838f为主色调，主要运用于大面积背景色，文案标注色和图标色-->
+    <!--#005662为主色调的深色，主要运用于大部分顶部标题栏颜色，部分页面例外，详见效果图-->
+    <!--#4fb3bf为主色调的浅色，主要运用于部分页面的背景色-->
+    <color name="toolbar_color_primary">#765ed4</color>
+    <color name="toolbar_second_color_primary">#765ed4</color>
+    <color name="main_color_9e91fc">#9e91fc</color>
+    <color name="toolbar_hint_color_primary">#cc9e91fc</color>
+    <color name="toolbar_some_bg">#6d57c1</color>
+    <color name="main_color_accent">#765ed4</color>
+
+    <!--系统规范 btn 色调-->
+    <!--#bobec5为辅助色，运用于主BTN-->
+    <!--#e2f1f8为辅助色的浅色系，运用于删除按钮等-->
+    <!--#dae3f0为BTN禁用色-->
+    <color name="function_btn_actived">#33765ed4</color>
+    <color name="function_btn_not_enabled">#e6e6f1</color>
+    <color name="function_btn_ripple">#808e95</color>
+
+    <!--function-btn 字体颜色值-->
+    <!--常规BTN字体颜色：34363d-->
+    <!--禁用BTN字体颜色： #a1afc3-->
+    <color name="function_text_normal">#ffffff</color>
+    <color name="function_text_actived">#765ed4</color>
+    <color name="function_text_disabled">#afb0c9</color>
+
+    <!--//////////////////////////////////////-->
+    <!--//////////////////////////////////// 规范 UI 部分 -end -->
+    <!--//////////////////////////////////////-->
+    <!--绿色主题色-->
+
+    <color name="main_color_gray">#7F000000</color>
+    <color name="main_color_white_f5f5fb">#f5f5fb</color>
+    <color name="main_color_white_80ffffff">#80ffffff</color>
+    <color name="main_color_white">#FFFFFFFF</color>
+    <color name="main_color_bg_red_ffece2">#ffece2</color>
+    <color name="main_color_bg_red_ffe2e2">#ffe2e2</color>
+    <color name="main_color_red_fb397d">#fb397d</color>
+    <color name="main_color_red_fe2126">#fe2126</color>
+    <color name="main_color_red_ed652b">#ed652b</color>
+    <color name="main_color_red_ff316b">#ff316b</color>
+    <color name="main_color_yellow_ffb131">#ffb131</color>
+
+    <!--分割线-->
+    <color name="mc_divider_gray">#e8eef6</color>
+
+    <!--默认背景色-->
+    <color name="mc_window_background_gray_f5f5fb">#f5f5fb</color>
+
+    <!--白色字体,透明度不同-->
+    <color name="white_background_d2d7e6">#d2d7e6</color>
+    <color name="white_background_edf0f4">#edf0f4</color>
+    <color name="white_background_ccf4f4f5">#ccf4f4f5</color>
+    <color name="white_background_b0b3bb">#b0b3bb</color>
+
+    <!--黑色/灰色字体/背景-->
+    <color name="black_text_817F99">#817F99</color>
+    <color name="black_text_CFCAFE">#CFCAFE</color>
+    <color name="black_text_aab1c7">#aab1c7</color>
+    <color name="black_text_9ba0b5">#9ba0b5</color>
+    <color name="black_text_e9ecf6">#e9ecf6</color>
+    <color name="black_text_454553">#454553</color>
+    <color name="black_text_666">#FF666666</color>
+    <color name="black_text_9094c2">#9094c2</color>
+    <color name="black_text_37416b">#37416b</color>
+    <color name="black_text_99ffffff">#99ffffff</color>
+    <color name="black_text_444">#FF444444</color>
+    <color name="text_88879b">#88879b</color>
+    <color name="black_text_1d2028">#1d2028</color>
+    <color name="black_text_181717">#181717</color>
+    <color name="black_text_99181717">#99181717</color>
+    <color name="black_text_663a4254">#663a4254</color>
+    <color name="black_text_858bac">#858bac</color>
+    <color name="black_text_5b667e">#5b667e</color>
+    <color name="black_text_5b5a70">#5b5a70</color>
+    <color name="black_text_c0c2c6">#c0c2c6</color>
+    <color name="black_text_3a4254">#3a4254</color>
+    <color name="black_text_34363d">#34363d</color>
+    <color name="black_text_993a4254">#993a4254</color>
+    <color name="black_text_cc3a4254">#cc3a4254</color>
+    <color name="black_text_171a3f">#171a3f</color>
+    <color name="black_text_99171a3f">#99171a3f</color>
+    <color name="black_text_803a4254">#803a4254</color>
+    <color name="black_text_605e7c">#FF605e7c</color>
+    <color name="black_text_9c9fa6">#9c9fa6</color>
+    <!--<color name="black_text_2d3146">#2d3146</color>-->
+    <color name="gray_background_e5_1">#FFE5E5E5</color>
+    <color name="gray_background_f2">#f2f2f2</color>
+    <color name="gray_background_27252c">#27252c</color>
+
+    <!--绿色字体-->
+    <color name="green_text_09c2a1">#FF09c2a1</color>
+
+    <!--搜索框中文字颜色,背景颜色,偏蓝-->
+    <color name="blue_bg_8ca7fc">#8ca7fc</color>
+
+    <!--黄色字体颜色-->
+    <color name="yellow">#ff7800</color>
+
+    <!--dark模式下,toolbar的属性颜色-->
+    <color name="colorAccentHacker">#4c4a48</color>
+
+    <!--白色-->
+    <color name="white">#ffffff</color>
+    <color name="white_99">#99ffffff</color>
+</resources>

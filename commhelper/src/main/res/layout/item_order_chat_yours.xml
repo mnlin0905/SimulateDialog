@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/view_padding_margin_16dp"
+    android:paddingTop="@dimen/view_padding_margin_12dp"
+    android:paddingEnd="@dimen/view_padding_margin_64dp"
+    android:paddingBottom="@dimen/view_padding_margin_12dp"
+    tools:background="@color/dark_color_1d2037_f4f4f4">
+
+    <!--頭像-->
+    <ImageView
+        android:id="@+id/iv_head_image"
+        android:layout_width="@dimen/view_height_36dp"
+        android:layout_height="@dimen/view_height_36dp"
+        android:src="@drawable/dark_icon_chat_custom" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:orientation="vertical">
+        <!--消息-->
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_item_chat_yours"
+            android:gravity="start"
+            android:paddingStart="@dimen/view_padding_margin_20dp"
+            android:paddingTop="@dimen/view_padding_margin_12dp"
+            android:paddingEnd="@dimen/view_padding_margin_12dp"
+            android:paddingBottom="@dimen/view_padding_margin_12dp"
+            android:textColor="@color/main_color_white"
+            android:textSize="@dimen/text_size_normal_14sp"
+            tools:text="買家拍下未付款，等待買家付款!" />
+    </LinearLayout>
+</LinearLayout>

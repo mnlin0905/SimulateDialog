@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/view_padding_margin_64dp"
+    android:paddingBottom="@dimen/view_padding_margin_64dp">
+
+    <!--腾讯翻译-->
+    <TextView
+        android:id="@+id/tv_tecent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_padding_margin_16dp"
+        android:background="#22000000"
+        android:padding="@dimen/view_padding_margin_16dp"
+        android:text="腾讯" />
+
+    <!--阿里翻译-->
+    <TextView
+        android:id="@+id/tv_ali"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_padding_margin_16dp"
+        android:background="#22000000"
+        android:padding="@dimen/view_padding_margin_16dp"
+        android:text="阿里" />
+</LinearLayout>

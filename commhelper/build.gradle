@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "kotlin-kapt"
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "com.oppo.commhelper"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        encoding "UTF-8"
+        incremental true
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // page-module
+    implementation project(':page')
+    implementation project(':page_annotation')
+    kapt project(':page_processor')
+
+    //anko
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+    implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
+    implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
+    implementation "org.jetbrains.anko:anko-gridlayout-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-percent:$anko_version"
+    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
+    implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-support-v4:$anko_version"
+    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
+
+    //RxJava与RxAndroid
+    implementation('io.reactivex.rxjava2:rxjava:2.1.3') {
+        force = true
+    }
+    implementation('io.reactivex.rxjava2:rxandroid:2.0.1') {
+        force = true
+    }
+
+    //retrofit;
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    //使用GSON库将http返回的数据转换为对象
+    implementation('com.squareup.retrofit2:converter-gson:2.3.0') {
+        exclude group: 'com.google.code.gson'
+        exclude group: 'com.squareup.okhttp3'
+    }
+
+    //使用RxJava将返回的数据对象转为Observable(T);
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //okhttp打印日志
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    //引入OkHttp框架
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    //Logger
+    implementation 'com.orhanobut:logger:2.1.1'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    //AndroidUtilCode
+    implementation 'com.blankj:utilcode:1.12.1'
+}

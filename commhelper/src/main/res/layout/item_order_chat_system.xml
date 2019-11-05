@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/view_padding_margin_72dp"
+    android:paddingTop="@dimen/view_padding_margin_12dp"
+    android:paddingEnd="@dimen/view_padding_margin_72dp"
+    android:paddingBottom="@dimen/view_padding_margin_12dp"
+    tools:background="@color/dark_color_1d2037_f4f4f4">
+
+    <!--時間-->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textColor="@color/dark_main_text_666986"
+        android:textSize="@dimen/text_size_small_12sp"
+        tools:text="2018-08-21 18:03:28" />
+
+    <!--消息-->
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/view_padding_margin_8dp"
+        app:cardBackgroundColor="@color/dark_color_272a3f_ffffff"
+        app:cardCornerRadius="@dimen/drawable_shape_normal_radius_5dp">
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="@dimen/view_padding_margin_20dp"
+            android:paddingTop="@dimen/view_padding_margin_12dp"
+            android:paddingEnd="@dimen/view_padding_margin_20dp"
+            android:paddingBottom="@dimen/view_padding_margin_12dp"
+            android:textColor="@color/dark_main_text_666986"
+            android:textSize="@dimen/text_size_small_12sp"
+            tools:text="Henry為您服務!" />
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
