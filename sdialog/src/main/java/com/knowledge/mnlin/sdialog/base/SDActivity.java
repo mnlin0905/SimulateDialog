@@ -1,8 +1,10 @@
 package com.knowledge.mnlin.sdialog.base;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
+import android.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.knowledge.mnlin.sdialog.R;
 import com.knowledge.mnlin.sdialog.interfaces.ProvideIncludeDialogInterface;
 import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup;

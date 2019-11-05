@@ -1,11 +1,13 @@
 package com.knowledge.mnlin.sdialog.utils;
 
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.annotation.LayoutRes;
+import android.annotation.Nullable;
+
 import com.knowledge.mnlin.sdialog.interfaces.ProvideIncludeDialogVGAnimator;
 import com.knowledge.mnlin.sdialog.interfaces.SimulateDialogInterface;
 import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup;

@@ -1,3 +1,5 @@
-include ':app', ':page_processor', ':page_annotation'
-include ':sdialog'
-include ':test_dy_compiler'
+// include ':app'
+include ':commhelper'
+include ':page_processor', ':page_annotation', ":page"
+//include ':sdialog'
+//include ':test_dy_compiler'

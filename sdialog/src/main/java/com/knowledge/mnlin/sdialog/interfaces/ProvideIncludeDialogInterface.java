@@ -1,6 +1,7 @@
 package com.knowledge.mnlin.sdialog.interfaces;
 
-import android.support.annotation.Nullable;
+
+import android.annotation.Nullable;
 
 import com.knowledge.mnlin.sdialog.widgets.IncludeDialogViewGroup;
 

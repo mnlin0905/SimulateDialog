@@ -3,7 +3,9 @@ package com.knowledge.mnlin.page_processor.processors;
 import com.google.auto.service.AutoService;
 import com.knowledge.mnlin.page_annotation.annotations.InjectPageTransAnim;
 import com.knowledge.mnlin.page_annotation.consts.PageGenClassConst;
+import com.knowledge.mnlin.page_annotation.consts.PageGenPackageConst;
 import com.knowledge.mnlin.page_processor.consts.ProcessorConst;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -29,14 +31,11 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
-import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PAGE_MODULE_MAIN_PACKAGE;
+import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.COMMON_CLASS_PAGE;
 import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PAGE_MODULE_WARNING_TIP;
 
-/**
- * The first interface entrance ensures that there is a visual interface when the application enters
- */
 @AutoService(Processor.class)
-@SupportedAnnotationTypes(ProcessorConst.PATH_ANNOTATION_PAGE_TRANS_ANIM)
+@SupportedAnnotationTypes(ProcessorConst.PATH_ANNOTATION_PAGE_INJECT_TRANS_ANIM)
 @SupportedSourceVersion(value = SourceVersion.RELEASE_8)
 public class PageTransAnimProcessor extends AbstractProcessor {
     private static final String TAG = "PageTransAnimProcessor";
@@ -60,55 +59,58 @@ public class PageTransAnimProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Set<? extends Element> elementsAnnotatedWith = roundEnvironment.getElementsAnnotatedWith(InjectPageTransAnim.class);
+        Set<? extends Element> elementsAnnotatedWith =
+                roundEnvironment.getElementsAnnotatedWith(InjectPageTransAnim.class);
         Iterator<? extends Element> iterator = elementsAnnotatedWith.iterator();
         TypeElement typeElement;
-        if (iterator.hasNext()) {
-            typeElement = (TypeElement) iterator.next();
-        } else {
-            messager.printMessage(Diagnostic.Kind.WARNING, ">>>> " + TAG + " : ABORT");
-            return false;
-        }
 
         messager.printMessage(Diagnostic.Kind.WARNING, ">>>> " + TAG + " : BEGIN-PROCESS ");
 
-        // page-annotation-package
-        // gen-target-package
-        String interface_page = PAGE_MODULE_MAIN_PACKAGE + ".interfaces.Page";
-        String package_target;
+        // will create more than one file
+        while (iterator.hasNext()) {
+            typeElement = (TypeElement) iterator.next();
 
-        if (typeElement == null) {
-            messager.printMessage(Diagnostic.Kind.ERROR, ">>>> " + TAG + " : no page-class annotate '@InjectPageTransAnim', page module can not work ");
-        } else if (!typeUtils.isSubtype(typeElement.asType(),
-                elementUtils.getTypeElement(interface_page).asType())) {
-            messager.printMessage(Diagnostic.Kind.ERROR, ">>>> " + TAG + " : Only 'page' type class can inject '@InjectPageTransAnim' annotation " + elementUtils.getTypeElement(interface_page).asType());
-        } else {
+            // page-annotation-package
+            // gen-target-package
+            String interface_page = COMMON_CLASS_PAGE.reflectionName();
+            String package_target;
+
             try {
-                // count package-path
-                PackageElement pkgElement = (PackageElement) typeElement.getEnclosingElement();
-                if (pkgElement.isUnnamed()) {
-                    package_target = "";
+                if (!typeUtils.isSubtype(typeElement.asType(),
+                        elementUtils.getTypeElement(interface_page).asType())) {
+                    messager.printMessage(Diagnostic.Kind.ERROR, ">>>> " + TAG
+                            + " : Only 'page' type class can inject '@InjectPageTransAnim' annotation "
+                            + elementUtils.getTypeElement(interface_page).asType());
                 } else {
-                    package_target = pkgElement.getQualifiedName().toString();
+                    // count package-path
+                    PackageElement pkgElement = (PackageElement) typeElement.getEnclosingElement();
+                    if (pkgElement.isUnnamed()) {
+                        package_target = "";
+                    } else {
+                        package_target = pkgElement.getQualifiedName().toString();
+                    }
+
+                    // count annotations-string
+                    InjectPageTransAnim annotation = typeElement.getAnnotation(InjectPageTransAnim.class);
+                    String[] animations = annotation.animations();
+
+                    messager.printMessage(Diagnostic.Kind.WARNING, ">>>> " + TAG + " )");
+
+                    JavaFile.builder(package_target, createClass(typeElement, animations))
+                            .addFileComment(PAGE_MODULE_WARNING_TIP)
+                            .build()
+                            .writeTo(filer);
                 }
-
-                // count annotations-string
-                InjectPageTransAnim annotation = typeElement.getAnnotation(InjectPageTransAnim.class);
-                String[] animations = annotation.animations();
-
-                JavaFile.builder(package_target, createClass(typeElement, animations))
-                        .addFileComment(PAGE_MODULE_WARNING_TIP)
-                        .build()
-                        .writeTo(filer);
             } catch (Exception e) {
                 messager.printMessage(Diagnostic.Kind.WARNING, ">>>> " + TAG + " :  " + e.toString());
+                break;
             }
         }
 
         return true;
     }
 
-    private TypeSpec createClass(TypeElement typeElement, String[] animations) throws ClassNotFoundException {
+    private TypeSpec createClass(TypeElement typeElement, String[] animations) {
         String className = typeElement.getSimpleName() + PageGenClassConst.CLASS_PAGE_GEN_TRANS_ANIM_SUFFIX;
 
         return TypeSpec.classBuilder(className)
@@ -118,9 +120,10 @@ public class PageTransAnimProcessor extends AbstractProcessor {
                 .build();
     }
 
-    private MethodSpec createMethod(String[] animations) throws ClassNotFoundException {
+    private MethodSpec createMethod(String[] animations) {
         // create return type
-        TypeElement type = elementUtils.getTypeElement(PAGE_MODULE_MAIN_PACKAGE + ".interfaces.PageTransAnimation");
+        TypeElement type =
+                elementUtils.getTypeElement(ProcessorConst.COMMON_CLASS_PAGE_TRANS_ANIMATION.reflectionName());
         TypeName returnType = TypeName.get(type.asType());
 
         // create annotations
@@ -137,9 +140,11 @@ public class PageTransAnimProcessor extends AbstractProcessor {
         return MethodSpec.methodBuilder(ProcessorConst.PAGE_TRANS_ANIM_METHOD)
                 .addModifiers(Modifier.STATIC)
                 .returns(returnType)
-                .addAnnotation(Class.forName(ProcessorConst.PAGE_RETURN_NULLABLE))
+                .addAnnotation(ProcessorConst.COMMON_ANNOTATION_NULLABLE)
                 .addComment("Annotation class must have a default 'public'' constructor")
-                .addStatement("return " + PAGE_MODULE_MAIN_PACKAGE + ".factory.PageTransAnimFactory.getInstance().createPageTransAnimation(" + builder.toString() + ")")
+                .addStatement("return $T.getInstance().createPageTransAnimation($L)",
+                        ClassName.get(PageGenPackageConst.PAGE_MODULE_MAIN_PACKAGE + ".factory", "PageTransAnimFactory"),
+                        builder.toString())
                 .build();
     }
 }

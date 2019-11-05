@@ -1,4 +1,4 @@
-package com.knowledge.mnlin.page
+package com.knowledge.mnlin.test
 
 import org.junit.Test
 

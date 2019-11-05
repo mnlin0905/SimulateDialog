@@ -2,6 +2,8 @@ package com.knowledge.mnlin.page_processor.processors;
 
 import com.google.auto.service.AutoService;
 import com.knowledge.mnlin.page_annotation.annotations.PageEnterPoint;
+import com.knowledge.mnlin.page_annotation.consts.PageGenMethodConst;
+import com.knowledge.mnlin.page_annotation.consts.PageGenPackageConst;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -28,8 +30,6 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 import static com.knowledge.mnlin.page_annotation.consts.PageGenClassConst.CLASS_PAGE_GEN_ENTER_POINT;
-import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PAGE_ENTER_POINT_METHOD;
-import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PAGE_MODULE_MAIN_PACKAGE;
 import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PAGE_MODULE_WARNING_TIP;
 import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PATH_ANNOTATION_PAGE_ENTER_POINT;
 
@@ -40,7 +40,7 @@ import static com.knowledge.mnlin.page_processor.consts.ProcessorConst.PATH_ANNO
 @SupportedAnnotationTypes(PATH_ANNOTATION_PAGE_ENTER_POINT)
 @SupportedSourceVersion(value = SourceVersion.RELEASE_8)
 public class PageMainEnterProcessor extends AbstractProcessor {
-    private static final String TAG = "PageMainEnterProcessor";
+    private static final String TAG = "PageMainEnterProcessorAAAAA";
 
     private Messager messager;
 
@@ -75,8 +75,8 @@ public class PageMainEnterProcessor extends AbstractProcessor {
 
         // page-annotation-package
         // core-package
-        String interface_page = PAGE_MODULE_MAIN_PACKAGE + ".interfaces.Page";
-        String package_call = PAGE_MODULE_MAIN_PACKAGE + ".core";
+        String interface_page = PageGenPackageConst.PAGE_MODULE_MAIN_PACKAGE + ".interfaces.Page";
+        String package_call = PageGenPackageConst.PAGE_MODULE_MAIN_PACKAGE + ".core";
 
         if (typeElement == null) {
             messager.printMessage(Diagnostic.Kind.ERROR, ">>>> " + TAG + " : no page-class annotate '@InjectPageTransAnim', page module can not work ");
@@ -108,7 +108,7 @@ public class PageMainEnterProcessor extends AbstractProcessor {
     private MethodSpec createMethod(TypeElement typeElement) {
         TypeName returnType = TypeName.get(typeElement.asType());
 
-        return MethodSpec.methodBuilder(PAGE_ENTER_POINT_METHOD)
+        return MethodSpec.methodBuilder(PageGenMethodConst.PAGE_ENTER_POINT_METHOD)
                 .addModifiers(Modifier.FINAL, Modifier.STATIC)
                 .returns(returnType)
                 .addComment("Annotation class must have a default 'public'' constructor")

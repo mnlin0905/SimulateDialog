@@ -3,12 +3,12 @@ package com.knowledge.mnlin.sdialog.widgets
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import android.support.annotation.CallSuper
-import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.annotation.CallSuper
+import androidx.annotation.RequiresApi
 import com.knowledge.mnlin.sdialog.R
 import com.knowledge.mnlin.sdialog.interfaces.ProvideIncludeDialogVGAnimator
 import com.knowledge.mnlin.sdialog.interfaces.SimulateDialogInterface
