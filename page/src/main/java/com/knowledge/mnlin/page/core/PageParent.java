@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.blankj.utilcode.util.Utils;
 import com.knowledge.mnlin.page.R;
 import com.knowledge.mnlin.page.configs.PageConfigs;
@@ -24,9 +26,10 @@ import com.knowledge.mnlin.page_annotation.consts.PageGenPackageConst;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedList;
-
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created on 2019/10/12  20:15
@@ -65,6 +68,15 @@ public class PageParent extends AppCompatActivity {
      */
     private Handler mainHandler;
 
+    /**
+     * Global variable storage, which can accompany all page life cycles, and can be used to maintain data between pages
+     */
+    private Map<String, Object> mGlobalMap = new HashMap();
+
+    /**
+     * Page local variable, does not affect page's own object recycling
+     */
+    private WeakHashMap<Page, Map<String, Object>> mPageLocals = new WeakHashMap();
 
     {
         // inject sInstance
@@ -72,7 +84,6 @@ public class PageParent extends AppCompatActivity {
         if (sInstance != null && pageManager != null && findAllPages().size() != 0) {
             throw new RuntimeException("cannot be create repeatedly");
         }
-
         sInstance = this;
     }
 

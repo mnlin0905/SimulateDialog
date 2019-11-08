@@ -90,19 +90,20 @@ class ChatPage : PageImpl() {
                 adapter = mAdapter
             }
 
-            //文本框(禁止輸入表情)
+            //文本框(设置返回键位逻辑)
             et_message.setOnEditorActionListener { view, actionId, _ ->
                 if (actionId != EditorInfo.IME_ACTION_UNSPECIFIED) {
                     et_message.text.toString().filterAlso({ it.isNotBlank() }) {
                         mDatas.add(ChatMessageBean(chat_status = TYPE_CHAT_MESSAGE_MINE, chat_message = it, chat_time = "03-06 16:04"))
                         mDatas.add(ChatMessageBean(chat_status = TYPE_CHAT_MESSAGE_YOURS, chat_message = "請諮詢百度!", chat_time = "03-06 16:04"))
                         mAdapter.notifyDataSetChanged()
-                        rv_messages.post { rv_messages.scrollToPosition(mDatas.size - 1) }
+                        rv_messages.post { rv_messages.smoothScrollToPosition(mDatas.size - 1) }
 
                         et_message.text = null.empty(comment = "發送消息,清除記錄")
                     }
                 }
-                false
+                //KeyboardUtils.showSoftInput(view)
+                true
             }
         }
     }
